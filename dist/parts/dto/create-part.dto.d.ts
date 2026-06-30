@@ -1,0 +1,16 @@
+export declare class CreatePartDto {
+    part_number: string;
+    name: string;
+    description?: string;
+    category?: string;
+    manufacturer?: string;
+    unit_price?: number;
+    stock_quantity?: number;
+    min_stock_level?: number;
+    location?: string;
+    unit?: string;
+    purchase_cost?: number;
+    selling_price?: number;
+    status?: string;
+    notes?: string;
+}
