@@ -42,16 +42,21 @@ async function bootstrap() {
     origin: (origin, callback) => {
       const allowedOrigins = [
         'http://localhost:3000',
-        'http://localhost:3002', 
+        'http://localhost:3002',
         'http://localhost:5173',
         'http://127.0.0.1:5173',
-        'http://localhost:8080'
+        'http://localhost:8080',
+        'https://motorgas-workshop-admin.vercel.app',
+        /\.vercel\.app$/,
       ];
       
       // Allow requests with no origin (mobile apps, Postman, etc.)
       if (!origin) return callback(null, true);
       
-      if (allowedOrigins.indexOf(origin) !== -1) {
+      const allowed = allowedOrigins.some(o =>
+        typeof o === 'string' ? o === origin : o.test(origin)
+      );
+      if (allowed) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));

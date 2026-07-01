@@ -39,11 +39,14 @@ async function bootstrap() {
                 'http://localhost:3002',
                 'http://localhost:5173',
                 'http://127.0.0.1:5173',
-                'http://localhost:8080'
+                'http://localhost:8080',
+                'https://motorgas-workshop-admin.vercel.app',
+                /\.vercel\.app$/,
             ];
             if (!origin)
                 return callback(null, true);
-            if (allowedOrigins.indexOf(origin) !== -1) {
+            const allowed = allowedOrigins.some(o => typeof o === 'string' ? o === origin : o.test(origin));
+            if (allowed) {
                 callback(null, true);
             }
             else {
