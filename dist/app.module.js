@@ -39,6 +39,9 @@ const part_categories_module_1 = require("./part-categories/part-categories.modu
 const vendors_module_1 = require("./vendors/vendors.module");
 const part_purchase_orders_module_1 = require("./part-purchase-orders/part-purchase-orders.module");
 const stores_module_1 = require("./stores/stores.module");
+const services_catalog_module_1 = require("./services-catalog/services-catalog.module");
+const job_cards_module_1 = require("./job-cards/job-cards.module");
+const vehicle_inspections_module_1 = require("./vehicle-inspections/vehicle-inspections.module");
 const global_auth_guard_1 = require("./auth/global-auth.guard");
 let AppModule = class AppModule {
 };
@@ -85,6 +88,9 @@ exports.AppModule = AppModule = __decorate([
             vendors_module_1.VendorsModule,
             part_purchase_orders_module_1.PartPurchaseOrdersModule,
             stores_module_1.StoresModule,
+            services_catalog_module_1.ServicesCatalogModule,
+            job_cards_module_1.JobCardsModule,
+            vehicle_inspections_module_1.VehicleInspectionsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

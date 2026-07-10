@@ -30,6 +30,11 @@ export class CreatePartDto {
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  unit_price_usd?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
   stock_quantity?: number;
 
   @IsOptional()
@@ -50,10 +55,13 @@ export class CreatePartDto {
   @Type(() => Number)
   purchase_cost?: number;
 
-  @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  selling_price?: number;
+  selling_price: number;
+
+  @IsNumber()
+  @Type(() => Number)
+  selling_price_usd: number;
 
   @IsOptional()
   @IsString()

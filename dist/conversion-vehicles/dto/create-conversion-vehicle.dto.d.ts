@@ -16,4 +16,5 @@ export declare class CreateConversionVehicleDto {
     unit_number?: string;
     notes?: string;
     photo_url?: string;
+    photo_urls?: string[];
 }

@@ -1,10 +1,14 @@
 import { Repository } from 'typeorm';
 import { Part } from '../entities/part.entity';
+import { PartInventory } from '../entities/part-inventory.entity';
 import { CreatePartDto } from './dto/create-part.dto';
 import { UpdatePartDto } from './dto/update-part.dto';
 export declare class PartsService {
     private partRepository;
-    constructor(partRepository: Repository<Part>);
+    private partInventoryRepository;
+    constructor(partRepository: Repository<Part>, partInventoryRepository: Repository<PartInventory>);
+    private getTotalStockByPartId;
+    private getTotalStockForPart;
     findAll(): Promise<Part[]>;
     findOne(id: number): Promise<Part>;
     create(createPartDto: CreatePartDto): Promise<Part>;

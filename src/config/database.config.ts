@@ -29,12 +29,17 @@ import { Conversion } from '../entities/conversion.entity';
 import { ConversionClient } from '../entities/conversion-client.entity';
 import { ConversionVehicle } from '../entities/conversion-vehicle.entity';
 import { Part } from '../entities/part.entity';
+import { PartInventory } from '../entities/part-inventory.entity';
 import { PartCategory } from '../entities/part-category.entity';
 import { Vendor } from '../entities/vendor.entity';
 import { VendorLedger } from '../entities/vendor-ledger.entity';
 import { PartPurchaseOrder } from '../entities/part-purchase-order.entity';
 import { PartPurchaseOrderItem } from '../entities/part-purchase-order-item.entity';
 import { Store } from '../entities/store.entity';
+import { Service } from '../entities/service.entity';
+import { JobCard } from '../entities/job-card.entity';
+import { JobCardItem } from '../entities/job-card-item.entity';
+import { VehicleInspection } from '../entities/vehicle-inspection.entity';
 
 export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOptions => ({
   type: 'mysql',
@@ -43,7 +48,7 @@ export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOp
   username: configService.get<string>('DB_USERNAME'),
   password: configService.get<string>('DB_PASSWORD'),
   database: configService.get<string>('DB_DATABASE'),
-      entities: [Staff, Department, ChatRoom, ChatMessage, Notice, Country, SalesRep, Region, Route, LoginHistory, Station, FuelPrice, Client, Product, Category, Aircraft, Destination, FlightSeries, SeatReservation, Passenger, Booking, BookingPassenger, ClientLedger, SalesOrder, SalesOrderItem, Supplier, PurchaseOrder, PurchaseOrderItem, Task, Crew, KeyAccount, KeyAccountLedger, Vehicle, Inventory, InventoryLedger, Sale, Conversion, ConversionClient, ConversionVehicle, Part, PartCategory, Vendor, VendorLedger, PartPurchaseOrder, PartPurchaseOrderItem, Store],
+      entities: [Staff, Department, ChatRoom, ChatMessage, Notice, Country, SalesRep, Region, Route, LoginHistory, Station, FuelPrice, Client, Product, Category, Aircraft, Destination, FlightSeries, SeatReservation, Passenger, Booking, BookingPassenger, ClientLedger, SalesOrder, SalesOrderItem, Supplier, PurchaseOrder, PurchaseOrderItem, Task, Crew, KeyAccount, KeyAccountLedger, Vehicle, Inventory, InventoryLedger, Sale, Conversion, ConversionClient, ConversionVehicle, Part, PartInventory, PartCategory, Vendor, VendorLedger, PartPurchaseOrder, PartPurchaseOrderItem, Store, Service, JobCard, JobCardItem, VehicleInspection],
   synchronize: false, // Disabled to avoid schema conflicts
   logging: configService.get<string>('NODE_ENV') === 'development',
   migrations: [__dirname + '/../migrations/*{.ts,.js}'],

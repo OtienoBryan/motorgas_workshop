@@ -36,9 +36,25 @@ export class ConversionClientsService {
       category: createConversionClientDto.category || 'individual',
       tax_pin: createConversionClientDto.tax_pin || null,
       is_active: createConversionClientDto.is_active !== undefined ? createConversionClientDto.is_active : 1,
+      account_number: await this.generateUniqueAccountNumber(),
     });
 
     return this.conversionClientRepository.save(client);
+  }
+
+  private async generateUniqueAccountNumber(): Promise<string> {
+    let sequence = (await this.conversionClientRepository.count()) + 1;
+    let accountNumber = '';
+    let isUnique = false;
+
+    while (!isUnique) {
+      accountNumber = `MT-${String(sequence).padStart(4, '0')}`;
+      const existing = await this.conversionClientRepository.findOne({ where: { account_number: accountNumber } });
+      isUnique = !existing;
+      sequence++;
+    }
+
+    return accountNumber;
   }
 
   async update(id: number, updateConversionClientDto: UpdateConversionClientDto): Promise<ConversionClient> {

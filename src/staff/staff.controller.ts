@@ -13,8 +13,8 @@ export class StaffController {
   ) {}
 
   @Get()
-  async findAll(): Promise<Staff[]> {
-    return this.staffService.findAll();
+  async findAll(@Query('role') role?: string): Promise<Staff[]> {
+    return role ? this.staffService.findByRole(role) : this.staffService.findAll();
   }
 
   @Get('departments')

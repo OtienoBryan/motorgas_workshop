@@ -24,8 +24,8 @@ let StaffController = class StaffController {
         this.staffService = staffService;
         this.cloudinaryService = cloudinaryService;
     }
-    async findAll() {
-        return this.staffService.findAll();
+    async findAll(role) {
+        return role ? this.staffService.findByRole(role) : this.staffService.findAll();
     }
     async getDepartments() {
         return this.staffService.getDepartments();
@@ -56,8 +56,9 @@ let StaffController = class StaffController {
 exports.StaffController = StaffController;
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)('role')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], StaffController.prototype, "findAll", null);
 __decorate([

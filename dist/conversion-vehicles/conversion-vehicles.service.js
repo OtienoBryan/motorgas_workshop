@@ -80,7 +80,8 @@ let ConversionVehiclesService = class ConversionVehiclesService {
             color: createConversionVehicleDto.color,
             unit_number: createConversionVehicleDto.unit_number,
             notes: createConversionVehicleDto.notes,
-            photo_url: createConversionVehicleDto.photo_url,
+            photo_url: createConversionVehicleDto.photo_url || createConversionVehicleDto.photo_urls?.[0],
+            photo_urls: createConversionVehicleDto.photo_urls,
         });
         return this.conversionVehicleRepository.save(vehicle);
     }
@@ -99,6 +100,9 @@ let ConversionVehiclesService = class ConversionVehiclesService {
             }
         }
         Object.assign(vehicle, updateConversionVehicleDto);
+        if (updateConversionVehicleDto.photo_urls) {
+            vehicle.photo_url = updateConversionVehicleDto.photo_url || updateConversionVehicleDto.photo_urls[0] || null;
+        }
         return this.conversionVehicleRepository.save(vehicle);
     }
     async remove(id) {

@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS Parts (
   category VARCHAR(100) NULL,
   manufacturer VARCHAR(255) NULL,
   unit_price DECIMAL(10, 2) NULL,
+  unit_price_usd DECIMAL(10, 2) NULL,
   stock_quantity INT(11) NULL DEFAULT 0,
   min_stock_level INT(11) NULL DEFAULT 0,
   location VARCHAR(255) NULL,

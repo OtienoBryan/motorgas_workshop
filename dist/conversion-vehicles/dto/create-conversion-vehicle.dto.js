@@ -30,6 +30,7 @@ class CreateConversionVehicleDto {
     unit_number;
     notes;
     photo_url;
+    photo_urls;
 }
 exports.CreateConversionVehicleDto = CreateConversionVehicleDto;
 __decorate([
@@ -119,4 +120,10 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateConversionVehicleDto.prototype, "photo_url", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], CreateConversionVehicleDto.prototype, "photo_urls", void 0);
 //# sourceMappingURL=create-conversion-vehicle.dto.js.map

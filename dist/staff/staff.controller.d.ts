@@ -6,7 +6,7 @@ export declare class StaffController {
     private readonly staffService;
     private readonly cloudinaryService;
     constructor(staffService: StaffService, cloudinaryService: CloudinaryService);
-    findAll(): Promise<Staff[]>;
+    findAll(role?: string): Promise<Staff[]>;
     getDepartments(): Promise<Department[]>;
     create(createStaffDto: Partial<Staff>): Promise<Staff>;
     update(id: number, updateStaffDto: Partial<Staff>): Promise<Staff>;

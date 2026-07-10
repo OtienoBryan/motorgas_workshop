@@ -14,6 +14,9 @@ export class ConversionClient {
   @Column({ type: 'varchar', length: 50 })
   contact: string;
 
+  @Column({ type: 'varchar', length: 100, unique: true })
+  account_number: string;
+
   @Column({ type: 'text', nullable: true })
   address: string | null;
 

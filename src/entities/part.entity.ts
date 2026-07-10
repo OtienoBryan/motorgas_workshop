@@ -26,6 +26,12 @@ export class Part {
   }})
   unit_price?: number | null;
 
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, transformer: {
+    to: (value: number) => value,
+    from: (value: string) => value != null ? parseFloat(value) : null
+  }})
+  unit_price_usd?: number | null;
+
   @Column({ type: 'int', nullable: true, default: 0 })
   stock_quantity?: number | null;
 
@@ -49,6 +55,12 @@ export class Part {
     from: (value: string) => value != null ? parseFloat(value) : null
   }})
   selling_price?: number | null;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, transformer: {
+    to: (value: number) => value,
+    from: (value: string) => value != null ? parseFloat(value) : null
+  }})
+  selling_price_usd?: number | null;
 
   @Column({ type: 'varchar', length: 50, nullable: true, default: 'active' })
   status?: string | null;

@@ -17,16 +17,40 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const part_entity_1 = require("../entities/part.entity");
+const part_inventory_entity_1 = require("../entities/part-inventory.entity");
 let PartsService = class PartsService {
     partRepository;
-    constructor(partRepository) {
+    partInventoryRepository;
+    constructor(partRepository, partInventoryRepository) {
         this.partRepository = partRepository;
+        this.partInventoryRepository = partInventoryRepository;
+    }
+    async getTotalStockByPartId() {
+        const rows = await this.partInventoryRepository
+            .createQueryBuilder('pi')
+            .select('pi.part_id', 'part_id')
+            .addSelect('SUM(pi.quantity)', 'total')
+            .groupBy('pi.part_id')
+            .getRawMany();
+        return new Map(rows.map(r => [Number(r.part_id), Number(r.total)]));
+    }
+    async getTotalStockForPart(partId) {
+        const result = await this.partInventoryRepository
+            .createQueryBuilder('pi')
+            .select('SUM(pi.quantity)', 'total')
+            .where('pi.part_id = :partId', { partId })
+            .getRawOne();
+        return result?.total != null ? Number(result.total) : 0;
     }
     async findAll() {
         console.log('📦 [PartsService] Finding all parts');
         const parts = await this.partRepository.find({
             order: { created_at: 'DESC' },
         });
+        const totals = await this.getTotalStockByPartId();
+        for (const part of parts) {
+            part.stock_quantity = totals.get(part.id) ?? 0;
+        }
         console.log(`✅ [PartsService] Found ${parts.length} parts`);
         return parts;
     }
@@ -38,6 +62,7 @@ let PartsService = class PartsService {
         if (!part) {
             throw new common_1.NotFoundException(`Part with ID ${id} not found`);
         }
+        part.stock_quantity = await this.getTotalStockForPart(id);
         return part;
     }
     async create(createPartDto) {
@@ -56,6 +81,9 @@ let PartsService = class PartsService {
                 category: createPartDto.category || null,
                 manufacturer: createPartDto.manufacturer || null,
                 unit_price: createPartDto.unit_price || null,
+                unit_price_usd: createPartDto.unit_price_usd || null,
+                selling_price: createPartDto.selling_price,
+                selling_price_usd: createPartDto.selling_price_usd,
                 stock_quantity: createPartDto.stock_quantity || 0,
                 min_stock_level: createPartDto.min_stock_level || 0,
                 location: createPartDto.location || null,
@@ -96,6 +124,8 @@ exports.PartsService = PartsService;
 exports.PartsService = PartsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(part_entity_1.Part)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(part_inventory_entity_1.PartInventory)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
 ], PartsService);
 //# sourceMappingURL=parts.service.js.map

@@ -30,6 +30,9 @@ import { PartCategoriesModule } from './part-categories/part-categories.module';
 import { VendorsModule } from './vendors/vendors.module';
 import { PartPurchaseOrdersModule } from './part-purchase-orders/part-purchase-orders.module';
 import { StoresModule } from './stores/stores.module';
+import { ServicesCatalogModule } from './services-catalog/services-catalog.module';
+import { JobCardsModule } from './job-cards/job-cards.module';
+import { VehicleInspectionsModule } from './vehicle-inspections/vehicle-inspections.module';
 import { GlobalAuthGuard } from './auth/global-auth.guard';
 
 @Module({
@@ -73,6 +76,9 @@ import { GlobalAuthGuard } from './auth/global-auth.guard';
     VendorsModule,
     PartPurchaseOrdersModule,
     StoresModule,
+    ServicesCatalogModule,
+    JobCardsModule,
+    VehicleInspectionsModule,
   ],
   controllers: [AppController],
   providers: [

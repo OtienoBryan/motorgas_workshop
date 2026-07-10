@@ -8,6 +8,7 @@ export declare class ConversionClientsService {
     findAll(): Promise<ConversionClient[]>;
     findOne(id: number): Promise<ConversionClient>;
     create(createConversionClientDto: CreateConversionClientDto): Promise<ConversionClient>;
+    private generateUniqueAccountNumber;
     update(id: number, updateConversionClientDto: UpdateConversionClientDto): Promise<ConversionClient>;
     remove(id: number): Promise<void>;
 }

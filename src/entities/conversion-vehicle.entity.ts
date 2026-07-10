@@ -59,7 +59,25 @@ export class ConversionVehicle {
   notes?: string;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  photo_url?: string;
+  photo_url?: string | null;
+
+  @Column({
+    type: 'text',
+    nullable: true,
+    transformer: {
+      to: (value?: string[] | null) => (value && value.length ? JSON.stringify(value) : null),
+      from: (value?: string | null) => {
+        if (!value) return [];
+        try {
+          const parsed = JSON.parse(value);
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      },
+    },
+  })
+  photo_urls?: string[];
 
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;

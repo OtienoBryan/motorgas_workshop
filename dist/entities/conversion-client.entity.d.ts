@@ -3,6 +3,7 @@ export declare class ConversionClient {
     name: string;
     email: string | null;
     contact: string;
+    account_number: string;
     address: string | null;
     region: string | null;
     category: 'individual' | 'company';

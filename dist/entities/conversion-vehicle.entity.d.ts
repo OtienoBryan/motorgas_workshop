@@ -18,7 +18,8 @@ export declare class ConversionVehicle {
     color?: string;
     unit_number?: string;
     notes?: string;
-    photo_url?: string;
+    photo_url?: string | null;
+    photo_urls?: string[];
     created_at: Date;
     updated_at: Date;
 }

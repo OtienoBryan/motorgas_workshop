@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Part } from '../entities/part.entity';
+import { PartInventory } from '../entities/part-inventory.entity';
 import { CreatePartDto } from './dto/create-part.dto';
 import { UpdatePartDto } from './dto/update-part.dto';
 
@@ -10,30 +11,60 @@ export class PartsService {
   constructor(
     @InjectRepository(Part)
     private partRepository: Repository<Part>,
+    @InjectRepository(PartInventory)
+    private partInventoryRepository: Repository<PartInventory>,
   ) {}
+
+  private async getTotalStockByPartId(): Promise<Map<number, number>> {
+    const rows = await this.partInventoryRepository
+      .createQueryBuilder('pi')
+      .select('pi.part_id', 'part_id')
+      .addSelect('SUM(pi.quantity)', 'total')
+      .groupBy('pi.part_id')
+      .getRawMany<{ part_id: number; total: string }>();
+
+    return new Map(rows.map(r => [Number(r.part_id), Number(r.total)]));
+  }
+
+  private async getTotalStockForPart(partId: number): Promise<number> {
+    const result = await this.partInventoryRepository
+      .createQueryBuilder('pi')
+      .select('SUM(pi.quantity)', 'total')
+      .where('pi.part_id = :partId', { partId })
+      .getRawOne<{ total: string | null }>();
+
+    return result?.total != null ? Number(result.total) : 0;
+  }
 
   async findAll(): Promise<Part[]> {
     console.log('📦 [PartsService] Finding all parts');
-    
+
     const parts = await this.partRepository.find({
       order: { created_at: 'DESC' },
     });
-    
+
+    const totals = await this.getTotalStockByPartId();
+    for (const part of parts) {
+      part.stock_quantity = totals.get(part.id) ?? 0;
+    }
+
     console.log(`✅ [PartsService] Found ${parts.length} parts`);
     return parts;
   }
 
   async findOne(id: number): Promise<Part> {
     console.log(`📦 [PartsService] Finding part by ID: ${id}`);
-    
+
     const part = await this.partRepository.findOne({
       where: { id },
     });
-    
+
     if (!part) {
       throw new NotFoundException(`Part with ID ${id} not found`);
     }
-    
+
+    part.stock_quantity = await this.getTotalStockForPart(id);
+
     return part;
   }
 
@@ -57,6 +88,9 @@ export class PartsService {
         category: createPartDto.category || null,
         manufacturer: createPartDto.manufacturer || null,
         unit_price: createPartDto.unit_price || null,
+        unit_price_usd: createPartDto.unit_price_usd || null,
+        selling_price: createPartDto.selling_price,
+        selling_price_usd: createPartDto.selling_price_usd,
         stock_quantity: createPartDto.stock_quantity || 0,
         min_stock_level: createPartDto.min_stock_level || 0,
         location: createPartDto.location || null,

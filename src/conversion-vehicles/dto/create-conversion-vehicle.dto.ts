@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber, IsOptional, IsEnum } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsOptional, IsEnum, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateConversionVehicleDto {
@@ -71,4 +71,9 @@ export class CreateConversionVehicleDto {
   @IsOptional()
   @IsString()
   photo_url?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  photo_urls?: string[];
 }

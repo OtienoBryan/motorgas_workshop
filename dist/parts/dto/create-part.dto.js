@@ -19,12 +19,14 @@ class CreatePartDto {
     category;
     manufacturer;
     unit_price;
+    unit_price_usd;
     stock_quantity;
     min_stock_level;
     location;
     unit;
     purchase_cost;
     selling_price;
+    selling_price_usd;
     status;
     notes;
 }
@@ -65,6 +67,12 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
+], CreatePartDto.prototype, "unit_price_usd", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
 ], CreatePartDto.prototype, "stock_quantity", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
@@ -89,11 +97,15 @@ __decorate([
     __metadata("design:type", Number)
 ], CreatePartDto.prototype, "purchase_cost", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
 ], CreatePartDto.prototype, "selling_price", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
+], CreatePartDto.prototype, "selling_price_usd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),

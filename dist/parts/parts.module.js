@@ -12,12 +12,13 @@ const typeorm_1 = require("@nestjs/typeorm");
 const parts_service_1 = require("./parts.service");
 const parts_controller_1 = require("./parts.controller");
 const part_entity_1 = require("../entities/part.entity");
+const part_inventory_entity_1 = require("../entities/part-inventory.entity");
 let PartsModule = class PartsModule {
 };
 exports.PartsModule = PartsModule;
 exports.PartsModule = PartsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([part_entity_1.Part])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([part_entity_1.Part, part_inventory_entity_1.PartInventory])],
         controllers: [parts_controller_1.PartsController],
         providers: [parts_service_1.PartsService],
         exports: [parts_service_1.PartsService],

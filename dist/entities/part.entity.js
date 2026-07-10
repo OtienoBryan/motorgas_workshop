@@ -19,12 +19,14 @@ let Part = class Part {
     category;
     manufacturer;
     unit_price;
+    unit_price_usd;
     stock_quantity;
     min_stock_level;
     location;
     unit;
     purchase_cost;
     selling_price;
+    selling_price_usd;
     status;
     notes;
     created_at;
@@ -63,6 +65,13 @@ __decorate([
     __metadata("design:type", Object)
 ], Part.prototype, "unit_price", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, nullable: true, transformer: {
+            to: (value) => value,
+            from: (value) => value != null ? parseFloat(value) : null
+        } }),
+    __metadata("design:type", Object)
+], Part.prototype, "unit_price_usd", void 0);
+__decorate([
     (0, typeorm_1.Column)({ type: 'int', nullable: true, default: 0 }),
     __metadata("design:type", Object)
 ], Part.prototype, "stock_quantity", void 0);
@@ -92,6 +101,13 @@ __decorate([
         } }),
     __metadata("design:type", Object)
 ], Part.prototype, "selling_price", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, nullable: true, transformer: {
+            to: (value) => value,
+            from: (value) => value != null ? parseFloat(value) : null
+        } }),
+    __metadata("design:type", Object)
+], Part.prototype, "selling_price_usd", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true, default: 'active' }),
     __metadata("design:type", Object)

@@ -32,6 +32,7 @@ let ConversionVehicle = class ConversionVehicle {
     unit_number;
     notes;
     photo_url;
+    photo_urls;
     created_at;
     updated_at;
 };
@@ -111,8 +112,29 @@ __decorate([
 ], ConversionVehicle.prototype, "notes", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 500, nullable: true }),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], ConversionVehicle.prototype, "photo_url", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'text',
+        nullable: true,
+        transformer: {
+            to: (value) => (value && value.length ? JSON.stringify(value) : null),
+            from: (value) => {
+                if (!value)
+                    return [];
+                try {
+                    const parsed = JSON.parse(value);
+                    return Array.isArray(parsed) ? parsed : [];
+                }
+                catch {
+                    return [];
+                }
+            },
+        },
+    }),
+    __metadata("design:type", Array)
+], ConversionVehicle.prototype, "photo_urls", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)
