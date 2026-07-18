@@ -14,8 +14,8 @@ export class CreateJobCardDto {
   conversion_vehicle_id?: number;
 
   @IsOptional()
-  @IsEnum(['open', 'in_progress', 'completed', 'closed'])
-  status?: 'open' | 'in_progress' | 'completed' | 'closed';
+  @IsEnum(['open', 'sent', 'approved', 'not_paid', 'paid', 'warranty', 'special_order', 'written_off', 'voided'])
+  status?: 'open' | 'sent' | 'approved' | 'not_paid' | 'paid' | 'warranty' | 'special_order' | 'written_off' | 'voided';
 
   @IsOptional()
   @IsInt()

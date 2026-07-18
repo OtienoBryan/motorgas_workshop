@@ -40,7 +40,7 @@ __decorate([
 ], CreateJobCardDto.prototype, "conversion_vehicle_id", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(['open', 'in_progress', 'completed', 'closed']),
+    (0, class_validator_1.IsEnum)(['open', 'sent', 'approved', 'not_paid', 'paid', 'warranty', 'special_order', 'written_off', 'voided']),
     __metadata("design:type", String)
 ], CreateJobCardDto.prototype, "status", void 0);
 __decorate([

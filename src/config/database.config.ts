@@ -39,7 +39,9 @@ import { Store } from '../entities/store.entity';
 import { Service } from '../entities/service.entity';
 import { JobCard } from '../entities/job-card.entity';
 import { JobCardItem } from '../entities/job-card-item.entity';
+import { JobCardPayment } from '../entities/job-card-payment.entity';
 import { VehicleInspection } from '../entities/vehicle-inspection.entity';
+import { Appointment } from '../entities/appointment.entity';
 
 export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOptions => ({
   type: 'mysql',
@@ -48,7 +50,7 @@ export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOp
   username: configService.get<string>('DB_USERNAME'),
   password: configService.get<string>('DB_PASSWORD'),
   database: configService.get<string>('DB_DATABASE'),
-      entities: [Staff, Department, ChatRoom, ChatMessage, Notice, Country, SalesRep, Region, Route, LoginHistory, Station, FuelPrice, Client, Product, Category, Aircraft, Destination, FlightSeries, SeatReservation, Passenger, Booking, BookingPassenger, ClientLedger, SalesOrder, SalesOrderItem, Supplier, PurchaseOrder, PurchaseOrderItem, Task, Crew, KeyAccount, KeyAccountLedger, Vehicle, Inventory, InventoryLedger, Sale, Conversion, ConversionClient, ConversionVehicle, Part, PartInventory, PartCategory, Vendor, VendorLedger, PartPurchaseOrder, PartPurchaseOrderItem, Store, Service, JobCard, JobCardItem, VehicleInspection],
+      entities: [Staff, Department, ChatRoom, ChatMessage, Notice, Country, SalesRep, Region, Route, LoginHistory, Station, FuelPrice, Client, Product, Category, Aircraft, Destination, FlightSeries, SeatReservation, Passenger, Booking, BookingPassenger, ClientLedger, SalesOrder, SalesOrderItem, Supplier, PurchaseOrder, PurchaseOrderItem, Task, Crew, KeyAccount, KeyAccountLedger, Vehicle, Inventory, InventoryLedger, Sale, Conversion, ConversionClient, ConversionVehicle, Part, PartInventory, PartCategory, Vendor, VendorLedger, PartPurchaseOrder, PartPurchaseOrderItem, Store, Service, JobCard, JobCardItem, JobCardPayment, VehicleInspection, Appointment],
   synchronize: false, // Disabled to avoid schema conflicts
   logging: configService.get<string>('NODE_ENV') === 'development',
   migrations: [__dirname + '/../migrations/*{.ts,.js}'],

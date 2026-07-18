@@ -4,6 +4,7 @@ import { JobCard } from '../entities/job-card.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateJobCardDto } from './dto/create-job-card.dto';
 import { UpdateJobCardDto } from './dto/update-job-card.dto';
+import { ConvertToInvoiceDto } from './dto/convert-to-invoice.dto';
 
 @Controller('job-cards')
 @UseGuards(JwtAuthGuard)
@@ -28,6 +29,11 @@ export class JobCardsController {
   @Put(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateJobCardDto: UpdateJobCardDto): Promise<JobCard> {
     return this.jobCardsService.update(id, updateJobCardDto);
+  }
+
+  @Post(':id/convert-to-invoice')
+  async convertToInvoice(@Param('id', ParseIntPipe) id: number, @Body() dto: ConvertToInvoiceDto): Promise<JobCard> {
+    return this.jobCardsService.convertToInvoice(id, dto);
   }
 
   @Delete(':id')

@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber, IsOptional, IsEnum, IsArray } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsOptional, IsEnum, IsArray, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateConversionVehicleDto {
@@ -48,6 +48,14 @@ export class CreateConversionVehicleDto {
   engine?: string;
 
   @IsOptional()
+  @IsString()
+  engine_capacity?: string;
+
+  @IsOptional()
+  @IsString()
+  engine_code?: string;
+
+  @IsOptional()
   @IsNumber()
   @Type(() => Number)
   current_odo?: number;
@@ -65,6 +73,14 @@ export class CreateConversionVehicleDto {
   unit_number?: string;
 
   @IsOptional()
+  @IsIn(['37L Internal', '42L Internal', '42L External', '92L'])
+  tank_capacity?: string;
+
+  @IsOptional()
+  @IsIn(['Manual Tracking', 'OBD2 + TM', 'TM'])
+  telemetry_status?: string;
+
+  @IsOptional()
   @IsString()
   notes?: string;
 
@@ -76,4 +92,17 @@ export class CreateConversionVehicleDto {
   @IsArray()
   @IsString({ each: true })
   photo_urls?: string[];
+
+  @IsOptional()
+  @IsString()
+  vsa_url?: string;
+
+  @IsOptional()
+  @IsString()
+  logbook_url?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  labels?: string[];
 }

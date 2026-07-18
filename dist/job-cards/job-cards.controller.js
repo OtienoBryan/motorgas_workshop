@@ -18,6 +18,7 @@ const job_cards_service_1 = require("./job-cards.service");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const create_job_card_dto_1 = require("./dto/create-job-card.dto");
 const update_job_card_dto_1 = require("./dto/update-job-card.dto");
+const convert_to_invoice_dto_1 = require("./dto/convert-to-invoice.dto");
 let JobCardsController = class JobCardsController {
     jobCardsService;
     constructor(jobCardsService) {
@@ -34,6 +35,9 @@ let JobCardsController = class JobCardsController {
     }
     async update(id, updateJobCardDto) {
         return this.jobCardsService.update(id, updateJobCardDto);
+    }
+    async convertToInvoice(id, dto) {
+        return this.jobCardsService.convertToInvoice(id, dto);
     }
     async remove(id) {
         await this.jobCardsService.remove(id);
@@ -70,6 +74,14 @@ __decorate([
     __metadata("design:paramtypes", [Number, update_job_card_dto_1.UpdateJobCardDto]),
     __metadata("design:returntype", Promise)
 ], JobCardsController.prototype, "update", null);
+__decorate([
+    (0, common_1.Post)(':id/convert-to-invoice'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, convert_to_invoice_dto_1.ConvertToInvoiceDto]),
+    __metadata("design:returntype", Promise)
+], JobCardsController.prototype, "convertToInvoice", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),

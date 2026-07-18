@@ -1,10 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JobCard } from '../entities/job-card.entity';
 import { JobCardItem } from '../entities/job-card-item.entity';
 import { CreateJobCardDto } from './dto/create-job-card.dto';
 import { UpdateJobCardDto } from './dto/update-job-card.dto';
+import { ConvertToInvoiceDto } from './dto/convert-to-invoice.dto';
+import { InventoryService } from '../inventory/inventory.service';
+import { TransactionType } from '../inventory/dto/inventory-transaction.dto';
 
 const RELATIONS = ['conversionClient', 'conversionVehicle', 'items', 'items.part', 'items.service', 'items.assignedStaff'];
 
@@ -15,6 +18,7 @@ export class JobCardsService {
     private jobCardRepository: Repository<JobCard>,
     @InjectRepository(JobCardItem)
     private jobCardItemRepository: Repository<JobCardItem>,
+    private inventoryService: InventoryService,
   ) {}
 
   async findAll(conversionVehicleId?: number): Promise<JobCard[]> {
@@ -77,6 +81,34 @@ export class JobCardsService {
   async remove(id: number): Promise<void> {
     const jobCard = await this.findOne(id);
     await this.jobCardRepository.remove(jobCard);
+  }
+
+  async convertToInvoice(id: number, dto: ConvertToInvoiceDto): Promise<JobCard> {
+    const jobCard = await this.findOne(id);
+
+    if (dto.update_inventory) {
+      const partItems = (jobCard.items || []).filter(item => item.item_type === 'part' && item.part_id);
+
+      if (partItems.length && !dto.store_id) {
+        throw new BadRequestException('store_id is required to update inventory');
+      }
+
+      for (const item of partItems) {
+        await this.inventoryService.recordTransaction({
+          store_id: dto.store_id!,
+          part_id: item.part_id!,
+          transaction_type: TransactionType.OUT,
+          quantity: Math.max(1, Math.round(Number(item.quantity))),
+          reference_number: `JC-${jobCard.id}`,
+          notes: 'Converted estimate to invoice',
+        });
+      }
+    }
+
+    jobCard.status = 'not_paid';
+    await this.jobCardRepository.save(jobCard);
+
+    return this.findOne(id);
   }
 
   private async replaceItems(jobCardId: number, items: CreateJobCardDto['items']): Promise<void> {

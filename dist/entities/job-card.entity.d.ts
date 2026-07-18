@@ -7,7 +7,7 @@ export declare class JobCard {
     conversionClient?: ConversionClient;
     conversion_vehicle_id?: number | null;
     conversionVehicle?: ConversionVehicle;
-    status: 'open' | 'in_progress' | 'completed' | 'closed';
+    status: 'open' | 'sent' | 'approved' | 'not_paid' | 'paid' | 'warranty' | 'special_order' | 'written_off' | 'voided';
     vat_enabled: number;
     vat_rate: number;
     discount: number;

@@ -18,13 +18,17 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const job_card_entity_1 = require("../entities/job-card.entity");
 const job_card_item_entity_1 = require("../entities/job-card-item.entity");
+const inventory_service_1 = require("../inventory/inventory.service");
+const inventory_transaction_dto_1 = require("../inventory/dto/inventory-transaction.dto");
 const RELATIONS = ['conversionClient', 'conversionVehicle', 'items', 'items.part', 'items.service', 'items.assignedStaff'];
 let JobCardsService = class JobCardsService {
     jobCardRepository;
     jobCardItemRepository;
-    constructor(jobCardRepository, jobCardItemRepository) {
+    inventoryService;
+    constructor(jobCardRepository, jobCardItemRepository, inventoryService) {
         this.jobCardRepository = jobCardRepository;
         this.jobCardItemRepository = jobCardItemRepository;
+        this.inventoryService = inventoryService;
     }
     async findAll(conversionVehicleId) {
         return this.jobCardRepository.find({
@@ -75,6 +79,28 @@ let JobCardsService = class JobCardsService {
         const jobCard = await this.findOne(id);
         await this.jobCardRepository.remove(jobCard);
     }
+    async convertToInvoice(id, dto) {
+        const jobCard = await this.findOne(id);
+        if (dto.update_inventory) {
+            const partItems = (jobCard.items || []).filter(item => item.item_type === 'part' && item.part_id);
+            if (partItems.length && !dto.store_id) {
+                throw new common_1.BadRequestException('store_id is required to update inventory');
+            }
+            for (const item of partItems) {
+                await this.inventoryService.recordTransaction({
+                    store_id: dto.store_id,
+                    part_id: item.part_id,
+                    transaction_type: inventory_transaction_dto_1.TransactionType.OUT,
+                    quantity: Math.max(1, Math.round(Number(item.quantity))),
+                    reference_number: `JC-${jobCard.id}`,
+                    notes: 'Converted estimate to invoice',
+                });
+            }
+        }
+        jobCard.status = 'not_paid';
+        await this.jobCardRepository.save(jobCard);
+        return this.findOne(id);
+    }
     async replaceItems(jobCardId, items) {
         await this.jobCardItemRepository.delete({ job_card_id: jobCardId });
         if (!items?.length)
@@ -102,6 +128,7 @@ exports.JobCardsService = JobCardsService = __decorate([
     __param(0, (0, typeorm_1.InjectRepository)(job_card_entity_1.JobCard)),
     __param(1, (0, typeorm_1.InjectRepository)(job_card_item_entity_1.JobCardItem)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        typeorm_2.Repository])
+        typeorm_2.Repository,
+        inventory_service_1.InventoryService])
 ], JobCardsService);
 //# sourceMappingURL=job-cards.service.js.map

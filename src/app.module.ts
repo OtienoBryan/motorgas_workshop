@@ -33,6 +33,7 @@ import { StoresModule } from './stores/stores.module';
 import { ServicesCatalogModule } from './services-catalog/services-catalog.module';
 import { JobCardsModule } from './job-cards/job-cards.module';
 import { VehicleInspectionsModule } from './vehicle-inspections/vehicle-inspections.module';
+import { AppointmentsModule } from './appointments/appointments.module';
 import { GlobalAuthGuard } from './auth/global-auth.guard';
 
 @Module({
@@ -79,6 +80,7 @@ import { GlobalAuthGuard } from './auth/global-auth.guard';
     ServicesCatalogModule,
     JobCardsModule,
     VehicleInspectionsModule,
+    AppointmentsModule,
   ],
   controllers: [AppController],
   providers: [

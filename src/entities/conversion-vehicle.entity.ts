@@ -43,6 +43,12 @@ export class ConversionVehicle {
   @Column({ type: 'varchar', length: 100, nullable: true })
   engine?: string;
 
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  engine_capacity?: string;
+
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  engine_code?: string;
+
   @Column({ type: 'int', nullable: true })
   current_odo?: number;
 
@@ -55,11 +61,23 @@ export class ConversionVehicle {
   @Column({ type: 'varchar', length: 100, nullable: true })
   unit_number?: string;
 
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  tank_capacity?: string;
+
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  telemetry_status?: string;
+
   @Column({ type: 'text', nullable: true })
   notes?: string;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
   photo_url?: string | null;
+
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  vsa_url?: string | null;
+
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  logbook_url?: string | null;
 
   @Column({
     type: 'text',
@@ -78,6 +96,24 @@ export class ConversionVehicle {
     },
   })
   photo_urls?: string[];
+
+  @Column({
+    type: 'text',
+    nullable: true,
+    transformer: {
+      to: (value?: string[] | null) => (value && value.length ? JSON.stringify(value) : null),
+      from: (value?: string | null) => {
+        if (!value) return [];
+        try {
+          const parsed = JSON.parse(value);
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      },
+    },
+  })
+  labels?: string[];
 
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;

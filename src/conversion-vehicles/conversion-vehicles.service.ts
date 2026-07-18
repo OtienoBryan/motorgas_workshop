@@ -78,9 +78,14 @@ export class ConversionVehiclesService {
       odo_unit: createConversionVehicleDto.odo_unit || 'KM',
       color: createConversionVehicleDto.color,
       unit_number: createConversionVehicleDto.unit_number,
+      tank_capacity: createConversionVehicleDto.tank_capacity,
+      telemetry_status: createConversionVehicleDto.telemetry_status,
       notes: createConversionVehicleDto.notes,
       photo_url: createConversionVehicleDto.photo_url || createConversionVehicleDto.photo_urls?.[0],
       photo_urls: createConversionVehicleDto.photo_urls,
+      vsa_url: createConversionVehicleDto.vsa_url,
+      logbook_url: createConversionVehicleDto.logbook_url,
+      labels: createConversionVehicleDto.labels,
     });
 
     return this.conversionVehicleRepository.save(vehicle);

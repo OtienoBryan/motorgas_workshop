@@ -55,7 +55,11 @@ __decorate([
     __metadata("design:type", conversion_vehicle_entity_1.ConversionVehicle)
 ], JobCard.prototype, "conversionVehicle", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: ['open', 'in_progress', 'completed', 'closed'], default: 'open' }),
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: ['open', 'sent', 'approved', 'not_paid', 'paid', 'warranty', 'special_order', 'written_off', 'voided'],
+        default: 'open',
+    }),
     __metadata("design:type", String)
 ], JobCard.prototype, "status", void 0);
 __decorate([

@@ -21,6 +21,17 @@ let ConversionClient = class ConversionClient {
     region;
     category;
     tax_pin;
+    referral_source;
+    referral_notes;
+    tax_exempt;
+    apply_discount;
+    discount_rate;
+    labour_rate_override;
+    labour_rate;
+    parts_markup_override;
+    parts_markup;
+    payment_terms_override;
+    payment_terms;
     is_active;
     created_at;
     updated_at;
@@ -62,6 +73,50 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
     __metadata("design:type", Object)
 ], ConversionClient.prototype, "tax_pin", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100, nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "referral_source", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "referral_notes", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'tinyint', width: 1, default: 0 }),
+    __metadata("design:type", Number)
+], ConversionClient.prototype, "tax_exempt", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'tinyint', width: 1, default: 0 }),
+    __metadata("design:type", Number)
+], ConversionClient.prototype, "apply_discount", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 5, scale: 2, nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "discount_rate", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'tinyint', width: 1, default: 0 }),
+    __metadata("design:type", Number)
+], ConversionClient.prototype, "labour_rate_override", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "labour_rate", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'tinyint', width: 1, default: 0 }),
+    __metadata("design:type", Number)
+], ConversionClient.prototype, "parts_markup_override", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 5, scale: 2, nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "parts_markup", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'tinyint', width: 1, default: 0 }),
+    __metadata("design:type", Number)
+], ConversionClient.prototype, "payment_terms_override", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100, nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "payment_terms", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'int', default: 1 }),
     __metadata("design:type", Number)

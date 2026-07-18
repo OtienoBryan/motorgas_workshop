@@ -6,5 +6,16 @@ export declare class CreateConversionClientDto {
     region?: string;
     category?: 'individual' | 'company';
     tax_pin?: string;
+    referral_source?: string;
+    referral_notes?: string;
+    tax_exempt?: number;
+    apply_discount?: number;
+    discount_rate?: number;
+    labour_rate_override?: number;
+    labour_rate?: number;
+    parts_markup_override?: number;
+    parts_markup?: number;
+    payment_terms_override?: number;
+    payment_terms?: string;
     is_active?: number;
 }

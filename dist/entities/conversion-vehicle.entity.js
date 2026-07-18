@@ -26,13 +26,20 @@ let ConversionVehicle = class ConversionVehicle {
     transmission_type;
     driven_wheel;
     engine;
+    engine_capacity;
+    engine_code;
     current_odo;
     odo_unit;
     color;
     unit_number;
+    tank_capacity;
+    telemetry_status;
     notes;
     photo_url;
+    vsa_url;
+    logbook_url;
     photo_urls;
+    labels;
     created_at;
     updated_at;
 };
@@ -91,6 +98,14 @@ __decorate([
     __metadata("design:type", String)
 ], ConversionVehicle.prototype, "engine", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
+    __metadata("design:type", String)
+], ConversionVehicle.prototype, "engine_capacity", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
+    __metadata("design:type", String)
+], ConversionVehicle.prototype, "engine_code", void 0);
+__decorate([
     (0, typeorm_1.Column)({ type: 'int', nullable: true }),
     __metadata("design:type", Number)
 ], ConversionVehicle.prototype, "current_odo", void 0);
@@ -107,6 +122,14 @@ __decorate([
     __metadata("design:type", String)
 ], ConversionVehicle.prototype, "unit_number", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
+    __metadata("design:type", String)
+], ConversionVehicle.prototype, "tank_capacity", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
+    __metadata("design:type", String)
+], ConversionVehicle.prototype, "telemetry_status", void 0);
+__decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     __metadata("design:type", String)
 ], ConversionVehicle.prototype, "notes", void 0);
@@ -114,6 +137,14 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 500, nullable: true }),
     __metadata("design:type", Object)
 ], ConversionVehicle.prototype, "photo_url", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 500, nullable: true }),
+    __metadata("design:type", Object)
+], ConversionVehicle.prototype, "vsa_url", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 500, nullable: true }),
+    __metadata("design:type", Object)
+], ConversionVehicle.prototype, "logbook_url", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         type: 'text',
@@ -135,6 +166,27 @@ __decorate([
     }),
     __metadata("design:type", Array)
 ], ConversionVehicle.prototype, "photo_urls", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'text',
+        nullable: true,
+        transformer: {
+            to: (value) => (value && value.length ? JSON.stringify(value) : null),
+            from: (value) => {
+                if (!value)
+                    return [];
+                try {
+                    const parsed = JSON.parse(value);
+                    return Array.isArray(parsed) ? parsed : [];
+                }
+                catch {
+                    return [];
+                }
+            },
+        },
+    }),
+    __metadata("design:type", Array)
+], ConversionVehicle.prototype, "labels", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)

@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEmail, IsOptional, IsInt, Min, Max, IsEnum } from 'class-validator';
+import { IsString, IsNotEmpty, IsEmail, IsOptional, IsInt, IsNumber, Min, Max, IsEnum } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateConversionClientDto {
@@ -29,6 +29,68 @@ export class CreateConversionClientDto {
   @IsOptional()
   @IsString()
   tax_pin?: string;
+
+  @IsOptional()
+  @IsString()
+  referral_source?: string;
+
+  @IsOptional()
+  @IsString()
+  referral_notes?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(1)
+  @Type(() => Number)
+  tax_exempt?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(1)
+  @Type(() => Number)
+  apply_discount?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  discount_rate?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(1)
+  @Type(() => Number)
+  labour_rate_override?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  labour_rate?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(1)
+  @Type(() => Number)
+  parts_markup_override?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  parts_markup?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(1)
+  @Type(() => Number)
+  payment_terms_override?: number;
+
+  @IsOptional()
+  @IsString()
+  payment_terms?: string;
 
   @IsOptional()
   @IsInt()

@@ -13,13 +13,20 @@ export declare class ConversionVehicle {
     transmission_type?: string;
     driven_wheel?: string;
     engine?: string;
+    engine_capacity?: string;
+    engine_code?: string;
     current_odo?: number;
     odo_unit: 'KM' | 'Miles';
     color?: string;
     unit_number?: string;
+    tank_capacity?: string;
+    telemetry_status?: string;
     notes?: string;
     photo_url?: string | null;
+    vsa_url?: string | null;
+    logbook_url?: string | null;
     photo_urls?: string[];
+    labels?: string[];
     created_at: Date;
     updated_at: Date;
 }

@@ -42,6 +42,7 @@ const stores_module_1 = require("./stores/stores.module");
 const services_catalog_module_1 = require("./services-catalog/services-catalog.module");
 const job_cards_module_1 = require("./job-cards/job-cards.module");
 const vehicle_inspections_module_1 = require("./vehicle-inspections/vehicle-inspections.module");
+const appointments_module_1 = require("./appointments/appointments.module");
 const global_auth_guard_1 = require("./auth/global-auth.guard");
 let AppModule = class AppModule {
 };
@@ -91,6 +92,7 @@ exports.AppModule = AppModule = __decorate([
             services_catalog_module_1.ServicesCatalogModule,
             job_cards_module_1.JobCardsModule,
             vehicle_inspections_module_1.VehicleInspectionsModule,
+            appointments_module_1.AppointmentsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

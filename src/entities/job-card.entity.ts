@@ -22,8 +22,12 @@ export class JobCard {
   @JoinColumn({ name: 'conversion_vehicle_id' })
   conversionVehicle?: ConversionVehicle;
 
-  @Column({ type: 'enum', enum: ['open', 'in_progress', 'completed', 'closed'], default: 'open' })
-  status: 'open' | 'in_progress' | 'completed' | 'closed';
+  @Column({
+    type: 'enum',
+    enum: ['open', 'sent', 'approved', 'not_paid', 'paid', 'warranty', 'special_order', 'written_off', 'voided'],
+    default: 'open',
+  })
+  status: 'open' | 'sent' | 'approved' | 'not_paid' | 'paid' | 'warranty' | 'special_order' | 'written_off' | 'voided';
 
   @Column({ type: 'int', default: 0 })
   vat_enabled: number;
