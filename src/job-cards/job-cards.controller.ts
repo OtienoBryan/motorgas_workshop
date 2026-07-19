@@ -12,8 +12,14 @@ export class JobCardsController {
   constructor(private readonly jobCardsService: JobCardsService) {}
 
   @Get()
-  async findAll(@Query('conversionVehicleId') conversionVehicleId?: string): Promise<JobCard[]> {
-    return this.jobCardsService.findAll(conversionVehicleId ? Number(conversionVehicleId) : undefined);
+  async findAll(
+    @Query('conversionVehicleId') conversionVehicleId?: string,
+    @Query('conversionClientId') conversionClientId?: string,
+  ): Promise<JobCard[]> {
+    return this.jobCardsService.findAll(
+      conversionVehicleId ? Number(conversionVehicleId) : undefined,
+      conversionClientId ? Number(conversionClientId) : undefined,
+    );
   }
 
   @Get(':id')

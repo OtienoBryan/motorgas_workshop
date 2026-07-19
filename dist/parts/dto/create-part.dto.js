@@ -29,6 +29,7 @@ class CreatePartDto {
     selling_price_usd;
     status;
     notes;
+    image_url;
 }
 exports.CreatePartDto = CreatePartDto;
 __decorate([
@@ -116,4 +117,9 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreatePartDto.prototype, "notes", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePartDto.prototype, "image_url", void 0);
 //# sourceMappingURL=create-part.dto.js.map

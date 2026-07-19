@@ -29,6 +29,7 @@ let Part = class Part {
     selling_price_usd;
     status;
     notes;
+    image_url;
     created_at;
     updated_at;
 };
@@ -116,6 +117,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     __metadata("design:type", Object)
 ], Part.prototype, "notes", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 500, nullable: true }),
+    __metadata("design:type", Object)
+], Part.prototype, "image_url", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)

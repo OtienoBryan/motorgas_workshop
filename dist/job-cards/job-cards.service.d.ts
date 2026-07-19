@@ -10,7 +10,7 @@ export declare class JobCardsService {
     private jobCardItemRepository;
     private inventoryService;
     constructor(jobCardRepository: Repository<JobCard>, jobCardItemRepository: Repository<JobCardItem>, inventoryService: InventoryService);
-    findAll(conversionVehicleId?: number): Promise<JobCard[]>;
+    findAll(conversionVehicleId?: number, conversionClientId?: number): Promise<JobCard[]>;
     findOne(id: number): Promise<JobCard>;
     create(dto: CreateJobCardDto): Promise<JobCard>;
     update(id: number, dto: UpdateJobCardDto): Promise<JobCard>;

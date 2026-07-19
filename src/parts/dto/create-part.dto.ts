@@ -70,5 +70,9 @@ export class CreatePartDto {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  @IsOptional()
+  @IsString()
+  image_url?: string;
 }
 

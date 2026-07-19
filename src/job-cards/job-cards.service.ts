@@ -11,6 +11,10 @@ import { TransactionType } from '../inventory/dto/inventory-transaction.dto';
 
 const RELATIONS = ['conversionClient', 'conversionVehicle', 'items', 'items.part', 'items.service', 'items.assignedStaff'];
 
+// List views only need totals (from items) and the client/vehicle headline —
+// the nested part/staff relations are only needed when opening a single job card.
+const LIST_RELATIONS = ['conversionClient', 'conversionVehicle', 'items', 'items.service'];
+
 @Injectable()
 export class JobCardsService {
   constructor(
@@ -21,10 +25,14 @@ export class JobCardsService {
     private inventoryService: InventoryService,
   ) {}
 
-  async findAll(conversionVehicleId?: number): Promise<JobCard[]> {
+  async findAll(conversionVehicleId?: number, conversionClientId?: number): Promise<JobCard[]> {
+    const where: Record<string, number> = {};
+    if (conversionVehicleId) where.conversion_vehicle_id = conversionVehicleId;
+    if (conversionClientId) where.conversion_client_id = conversionClientId;
+
     return this.jobCardRepository.find({
-      where: conversionVehicleId ? { conversion_vehicle_id: conversionVehicleId } : {},
-      relations: RELATIONS,
+      where,
+      relations: LIST_RELATIONS,
       order: { created_at: 'DESC' },
     });
   }

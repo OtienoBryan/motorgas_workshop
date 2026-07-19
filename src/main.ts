@@ -3,10 +3,14 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { SecurityInterceptor } from './auth/security.interceptor';
 import helmet from 'helmet';
+import compression from 'compression';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
+  // Gzip response compression — large JSON lists shrink ~5-10x on the wire
+  app.use(compression());
+
   // Security middleware
   app.use(helmet({
     contentSecurityPolicy: {

@@ -21,6 +21,7 @@ const job_card_item_entity_1 = require("../entities/job-card-item.entity");
 const inventory_service_1 = require("../inventory/inventory.service");
 const inventory_transaction_dto_1 = require("../inventory/dto/inventory-transaction.dto");
 const RELATIONS = ['conversionClient', 'conversionVehicle', 'items', 'items.part', 'items.service', 'items.assignedStaff'];
+const LIST_RELATIONS = ['conversionClient', 'conversionVehicle', 'items', 'items.service'];
 let JobCardsService = class JobCardsService {
     jobCardRepository;
     jobCardItemRepository;
@@ -30,10 +31,15 @@ let JobCardsService = class JobCardsService {
         this.jobCardItemRepository = jobCardItemRepository;
         this.inventoryService = inventoryService;
     }
-    async findAll(conversionVehicleId) {
+    async findAll(conversionVehicleId, conversionClientId) {
+        const where = {};
+        if (conversionVehicleId)
+            where.conversion_vehicle_id = conversionVehicleId;
+        if (conversionClientId)
+            where.conversion_client_id = conversionClientId;
         return this.jobCardRepository.find({
-            where: conversionVehicleId ? { conversion_vehicle_id: conversionVehicleId } : {},
-            relations: RELATIONS,
+            where,
+            relations: LIST_RELATIONS,
             order: { created_at: 'DESC' },
         });
     }

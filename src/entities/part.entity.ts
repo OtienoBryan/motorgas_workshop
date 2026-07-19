@@ -68,6 +68,9 @@ export class Part {
   @Column({ type: 'text', nullable: true })
   notes?: string | null;
 
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  image_url?: string | null;
+
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
 

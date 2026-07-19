@@ -87,6 +87,7 @@ let PartsService = class PartsService {
                 stock_quantity: createPartDto.stock_quantity || 0,
                 min_stock_level: createPartDto.min_stock_level || 0,
                 location: createPartDto.location || null,
+                image_url: createPartDto.image_url || null,
             });
             const savedPart = await this.partRepository.save(part);
             console.log(`✅ [PartsService] Part created with ID: ${savedPart.id}`);

@@ -15,4 +15,5 @@ export declare class CreatePartDto {
     selling_price_usd: number;
     status?: string;
     notes?: string;
+    image_url?: string;
 }

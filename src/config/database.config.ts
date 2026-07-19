@@ -41,6 +41,7 @@ import { JobCard } from '../entities/job-card.entity';
 import { JobCardItem } from '../entities/job-card-item.entity';
 import { JobCardPayment } from '../entities/job-card-payment.entity';
 import { VehicleInspection } from '../entities/vehicle-inspection.entity';
+import { ChecklistTemplate } from '../entities/checklist-template.entity';
 import { Appointment } from '../entities/appointment.entity';
 
 export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOptions => ({
@@ -50,9 +51,15 @@ export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOp
   username: configService.get<string>('DB_USERNAME'),
   password: configService.get<string>('DB_PASSWORD'),
   database: configService.get<string>('DB_DATABASE'),
-      entities: [Staff, Department, ChatRoom, ChatMessage, Notice, Country, SalesRep, Region, Route, LoginHistory, Station, FuelPrice, Client, Product, Category, Aircraft, Destination, FlightSeries, SeatReservation, Passenger, Booking, BookingPassenger, ClientLedger, SalesOrder, SalesOrderItem, Supplier, PurchaseOrder, PurchaseOrderItem, Task, Crew, KeyAccount, KeyAccountLedger, Vehicle, Inventory, InventoryLedger, Sale, Conversion, ConversionClient, ConversionVehicle, Part, PartInventory, PartCategory, Vendor, VendorLedger, PartPurchaseOrder, PartPurchaseOrderItem, Store, Service, JobCard, JobCardItem, JobCardPayment, VehicleInspection, Appointment],
+      entities: [Staff, Department, ChatRoom, ChatMessage, Notice, Country, SalesRep, Region, Route, LoginHistory, Station, FuelPrice, Client, Product, Category, Aircraft, Destination, FlightSeries, SeatReservation, Passenger, Booking, BookingPassenger, ClientLedger, SalesOrder, SalesOrderItem, Supplier, PurchaseOrder, PurchaseOrderItem, Task, Crew, KeyAccount, KeyAccountLedger, Vehicle, Inventory, InventoryLedger, Sale, Conversion, ConversionClient, ConversionVehicle, Part, PartInventory, PartCategory, Vendor, VendorLedger, PartPurchaseOrder, PartPurchaseOrderItem, Store, Service, JobCard, JobCardItem, JobCardPayment, VehicleInspection, ChecklistTemplate, Appointment],
   synchronize: false, // Disabled to avoid schema conflicts
-  logging: configService.get<string>('NODE_ENV') === 'development',
+  logging: ['error'], // Only log query errors — logging every query slows requests down
+  extra: {
+    connectionLimit: 10,
+    // Keep pooled connections alive so requests don't pay TCP+TLS setup to the remote DB
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 10000,
+  },
   migrations: [__dirname + '/../migrations/*{.ts,.js}'],
   migrationsRun: false,
 });

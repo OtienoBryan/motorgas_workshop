@@ -33,6 +33,7 @@ import { StoresModule } from './stores/stores.module';
 import { ServicesCatalogModule } from './services-catalog/services-catalog.module';
 import { JobCardsModule } from './job-cards/job-cards.module';
 import { VehicleInspectionsModule } from './vehicle-inspections/vehicle-inspections.module';
+import { ChecklistTemplatesModule } from './checklist-templates/checklist-templates.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { GlobalAuthGuard } from './auth/global-auth.guard';
 
@@ -80,6 +81,7 @@ import { GlobalAuthGuard } from './auth/global-auth.guard';
     ServicesCatalogModule,
     JobCardsModule,
     VehicleInspectionsModule,
+    ChecklistTemplatesModule,
     AppointmentsModule,
   ],
   controllers: [AppController],

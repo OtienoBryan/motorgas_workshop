@@ -6,7 +6,7 @@ import { ConvertToInvoiceDto } from './dto/convert-to-invoice.dto';
 export declare class JobCardsController {
     private readonly jobCardsService;
     constructor(jobCardsService: JobCardsService);
-    findAll(conversionVehicleId?: string): Promise<JobCard[]>;
+    findAll(conversionVehicleId?: string, conversionClientId?: string): Promise<JobCard[]>;
     findOne(id: number): Promise<JobCard>;
     create(createJobCardDto: CreateJobCardDto): Promise<JobCard>;
     update(id: number, updateJobCardDto: UpdateJobCardDto): Promise<JobCard>;

@@ -24,8 +24,8 @@ let JobCardsController = class JobCardsController {
     constructor(jobCardsService) {
         this.jobCardsService = jobCardsService;
     }
-    async findAll(conversionVehicleId) {
-        return this.jobCardsService.findAll(conversionVehicleId ? Number(conversionVehicleId) : undefined);
+    async findAll(conversionVehicleId, conversionClientId) {
+        return this.jobCardsService.findAll(conversionVehicleId ? Number(conversionVehicleId) : undefined, conversionClientId ? Number(conversionClientId) : undefined);
     }
     async findOne(id) {
         return this.jobCardsService.findOne(id);
@@ -48,8 +48,9 @@ exports.JobCardsController = JobCardsController;
 __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)('conversionVehicleId')),
+    __param(1, (0, common_1.Query)('conversionClientId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], JobCardsController.prototype, "findAll", null);
 __decorate([

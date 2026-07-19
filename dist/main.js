@@ -8,8 +8,10 @@ const common_1 = require("@nestjs/common");
 const app_module_1 = require("./app.module");
 const security_interceptor_1 = require("./auth/security.interceptor");
 const helmet_1 = __importDefault(require("helmet"));
+const compression_1 = __importDefault(require("compression"));
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    app.use((0, compression_1.default)());
     app.use((0, helmet_1.default)({
         contentSecurityPolicy: {
             directives: {

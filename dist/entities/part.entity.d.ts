@@ -16,6 +16,7 @@ export declare class Part {
     selling_price_usd?: number | null;
     status?: string | null;
     notes?: string | null;
+    image_url?: string | null;
     created_at: Date;
     updated_at: Date;
 }
