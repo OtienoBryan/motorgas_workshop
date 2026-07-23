@@ -18,7 +18,6 @@ class CreateKeyAccountDto {
     contact;
     account_number;
     type;
-    category;
     description;
     region;
     is_active;
@@ -50,11 +49,6 @@ __decorate([
     (0, class_validator_1.IsEnum)(['client', 'key_account']),
     __metadata("design:type", String)
 ], CreateKeyAccountDto.prototype, "type", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(['individual', 'company']),
-    __metadata("design:type", String)
-], CreateKeyAccountDto.prototype, "category", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),

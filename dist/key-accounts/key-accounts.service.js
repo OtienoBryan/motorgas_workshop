@@ -67,7 +67,6 @@ let KeyAccountsService = class KeyAccountsService {
                 contact: createKeyAccountDto.contact,
                 account_number: accountNumber,
                 type: accountType,
-                category: createKeyAccountDto.category || 'individual',
                 description: createKeyAccountDto.description || null,
                 region: createKeyAccountDto.region || null,
                 is_active: createKeyAccountDto.is_active !== undefined ? createKeyAccountDto.is_active : 1,

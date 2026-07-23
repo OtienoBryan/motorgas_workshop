@@ -184,8 +184,16 @@ export class InventoryService {
 
       console.log(`✅ [InventoryService] Transaction recorded: ${transactionDto.transaction_type} ${transactionDto.quantity} units`);
 
+      // Read back through the same transactional manager — the outer
+      // transaction hasn't committed yet, so a query through the plain
+      // repository (a separate connection) wouldn't see this row yet.
+      const inventoryWithRelations = await manager.findOne(Inventory, {
+        where: { id: savedInventory.id },
+        relations: ['store', 'part'],
+      });
+
       return {
-        inventory: await this.findOne(savedInventory.id),
+        inventory: inventoryWithRelations!,
         ledger: savedLedger,
       };
     });

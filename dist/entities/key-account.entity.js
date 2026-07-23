@@ -18,7 +18,6 @@ let KeyAccount = class KeyAccount {
     contact;
     account_number;
     type;
-    category;
     description;
     region;
     is_active;
@@ -50,10 +49,6 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'enum', enum: ['client', 'key_account'], default: 'key_account' }),
     __metadata("design:type", String)
 ], KeyAccount.prototype, "type", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: ['individual', 'company'], default: 'individual' }),
-    __metadata("design:type", String)
-], KeyAccount.prototype, "category", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     __metadata("design:type", Object)

@@ -1,5 +1,5 @@
 import { Inventory } from './inventory.entity';
-import { Store } from './store.entity';
+import { Station } from './station.entity';
 import { Part } from './part.entity';
 import { TransactionType } from '../inventory/dto/inventory-transaction.dto';
 export declare class InventoryLedger {
@@ -16,6 +16,6 @@ export declare class InventoryLedger {
     created_by?: number | null;
     created_at: Date;
     inventory?: Inventory;
-    store?: Store;
+    store?: Station;
     part?: Part;
 }

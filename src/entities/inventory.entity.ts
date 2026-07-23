@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, UpdateDateColumn } from 'typeorm';
-import { Store } from './store.entity';
+import { Station } from './station.entity';
 import { Part } from './part.entity';
 
 @Entity('parts_inventory')
@@ -25,9 +25,9 @@ export class Inventory {
   @UpdateDateColumn({ name: 'last_updated', type: 'timestamp' })
   last_updated: Date;
 
-  @ManyToOne(() => Store)
+  @ManyToOne(() => Station)
   @JoinColumn({ name: 'store_id' })
-  store?: Store;
+  store?: Station;
 
   @ManyToOne(() => Part)
   @JoinColumn({ name: 'part_id' })

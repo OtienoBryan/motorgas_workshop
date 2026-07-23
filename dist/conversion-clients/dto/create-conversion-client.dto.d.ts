@@ -3,8 +3,11 @@ export declare class CreateConversionClientDto {
     email?: string;
     contact: string;
     address?: string;
+    description?: string;
     region?: string;
     category?: 'individual' | 'company';
+    organization_type?: 'individual' | 'sacco' | 'company';
+    organization_name?: string;
     tax_pin?: string;
     referral_source?: string;
     referral_notes?: string;

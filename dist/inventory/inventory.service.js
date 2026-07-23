@@ -158,8 +158,12 @@ let InventoryService = class InventoryService {
             });
             const savedLedger = await manager.save(inventory_ledger_entity_1.InventoryLedger, ledger);
             console.log(`✅ [InventoryService] Transaction recorded: ${transactionDto.transaction_type} ${transactionDto.quantity} units`);
+            const inventoryWithRelations = await manager.findOne(inventory_entity_1.Inventory, {
+                where: { id: savedInventory.id },
+                relations: ['store', 'part'],
+            });
             return {
-                inventory: await this.findOne(savedInventory.id),
+                inventory: inventoryWithRelations,
                 ledger: savedLedger,
             };
         });

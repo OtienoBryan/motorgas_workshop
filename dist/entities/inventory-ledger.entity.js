@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.InventoryLedger = void 0;
 const typeorm_1 = require("typeorm");
 const inventory_entity_1 = require("./inventory.entity");
-const store_entity_1 = require("./store.entity");
+const station_entity_1 = require("./station.entity");
 const part_entity_1 = require("./part.entity");
 const inventory_transaction_dto_1 = require("../inventory/dto/inventory-transaction.dto");
 let InventoryLedger = class InventoryLedger {
@@ -91,9 +91,9 @@ __decorate([
     __metadata("design:type", inventory_entity_1.Inventory)
 ], InventoryLedger.prototype, "inventory", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => store_entity_1.Store),
+    (0, typeorm_1.ManyToOne)(() => station_entity_1.Station),
     (0, typeorm_1.JoinColumn)({ name: 'store_id' }),
-    __metadata("design:type", store_entity_1.Store)
+    __metadata("design:type", station_entity_1.Station)
 ], InventoryLedger.prototype, "store", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => part_entity_1.Part),

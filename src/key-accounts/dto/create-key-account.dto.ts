@@ -24,10 +24,6 @@ export class CreateKeyAccountDto {
   type?: 'client' | 'key_account';
 
   @IsOptional()
-  @IsEnum(['individual', 'company'])
-  category?: 'individual' | 'company';
-
-  @IsOptional()
   @IsString()
   description?: string;
 

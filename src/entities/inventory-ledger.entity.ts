@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 import { Inventory } from './inventory.entity';
-import { Store } from './store.entity';
+import { Station } from './station.entity';
 import { Part } from './part.entity';
 import { TransactionType } from '../inventory/dto/inventory-transaction.dto';
 
@@ -50,9 +50,9 @@ export class InventoryLedger {
   @JoinColumn({ name: 'inventory_id' })
   inventory?: Inventory;
 
-  @ManyToOne(() => Store)
+  @ManyToOne(() => Station)
   @JoinColumn({ name: 'store_id' })
-  store?: Store;
+  store?: Station;
 
   @ManyToOne(() => Part)
   @JoinColumn({ name: 'part_id' })

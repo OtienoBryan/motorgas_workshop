@@ -18,8 +18,11 @@ let ConversionClient = class ConversionClient {
     contact;
     account_number;
     address;
+    description;
     region;
     category;
+    organization_type;
+    organization_name;
     tax_pin;
     referral_source;
     referral_notes;
@@ -62,6 +65,10 @@ __decorate([
     __metadata("design:type", Object)
 ], ConversionClient.prototype, "address", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "description", void 0);
+__decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 191, nullable: true }),
     __metadata("design:type", Object)
 ], ConversionClient.prototype, "region", void 0);
@@ -69,6 +76,14 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'enum', enum: ['individual', 'company'], default: 'individual' }),
     __metadata("design:type", String)
 ], ConversionClient.prototype, "category", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'enum', enum: ['individual', 'sacco', 'company'], nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "organization_type", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 255, nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "organization_name", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
     __metadata("design:type", Object)

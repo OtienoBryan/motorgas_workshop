@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Inventory = void 0;
 const typeorm_1 = require("typeorm");
-const store_entity_1 = require("./store.entity");
+const station_entity_1 = require("./station.entity");
 const part_entity_1 = require("./part.entity");
 let Inventory = class Inventory {
     id;
@@ -54,9 +54,9 @@ __decorate([
     __metadata("design:type", Date)
 ], Inventory.prototype, "last_updated", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => store_entity_1.Store),
+    (0, typeorm_1.ManyToOne)(() => station_entity_1.Station),
     (0, typeorm_1.JoinColumn)({ name: 'store_id' }),
-    __metadata("design:type", store_entity_1.Store)
+    __metadata("design:type", station_entity_1.Station)
 ], Inventory.prototype, "store", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => part_entity_1.Part),

@@ -20,11 +20,23 @@ export class CreateConversionClientDto {
 
   @IsOptional()
   @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsString()
   region?: string;
 
   @IsOptional()
   @IsEnum(['individual', 'company'])
   category?: 'individual' | 'company';
+
+  @IsOptional()
+  @IsEnum(['individual', 'sacco', 'company'])
+  organization_type?: 'individual' | 'sacco' | 'company';
+
+  @IsOptional()
+  @IsString()
+  organization_name?: string;
 
   @IsOptional()
   @IsString()

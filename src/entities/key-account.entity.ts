@@ -20,9 +20,6 @@ export class KeyAccount {
   @Column({ type: 'enum', enum: ['client', 'key_account'], default: 'key_account' })
   type: 'client' | 'key_account';
 
-  @Column({ type: 'enum', enum: ['individual', 'company'], default: 'individual' })
-  category: 'individual' | 'company';
-
   @Column({ type: 'text', nullable: true })
   description: string | null;
 

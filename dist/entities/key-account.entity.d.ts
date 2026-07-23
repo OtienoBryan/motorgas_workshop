@@ -5,7 +5,6 @@ export declare class KeyAccount {
     contact: string;
     account_number: string | null;
     type: 'client' | 'key_account';
-    category: 'individual' | 'company';
     description: string | null;
     region: string | null;
     is_active: number;

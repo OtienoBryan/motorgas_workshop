@@ -4,7 +4,6 @@ export declare class CreateKeyAccountDto {
     contact: string;
     account_number?: string;
     type?: 'client' | 'key_account';
-    category?: 'individual' | 'company';
     description?: string;
     region?: string;
     is_active?: number;

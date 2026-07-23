@@ -2,10 +2,20 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { Station } from './station.entity';
 import { KeyAccount } from './key-account.entity';
 import { Vehicle } from './vehicle.entity';
+import { ConversionClient } from './conversion-client.entity';
+import { ConversionVehicle } from './conversion-vehicle.entity';
 
 export enum ClientType {
   REGULAR = 'regular',
   KEY_ACCOUNT = 'key_account',
+}
+
+export enum PaymentMethod {
+  CASH = 'CASH',
+  CARD = 'CARD',
+  MPESA = 'MPESA',
+  CREDIT = 'CREDIT',
+  OTHER = 'other',
 }
 
 @Entity('sales')
@@ -41,6 +51,20 @@ export class Sale {
   @JoinColumn({ name: 'vehicle_id' })
   vehicle?: Vehicle;
 
+  @Column({ name: 'conversion_client_id', nullable: true })
+  conversionClientId?: number;
+
+  @ManyToOne(() => ConversionClient)
+  @JoinColumn({ name: 'conversion_client_id' })
+  conversionClient?: ConversionClient;
+
+  @Column({ name: 'conversion_vehicle_id', nullable: true })
+  conversionVehicleId?: number;
+
+  @ManyToOne(() => ConversionVehicle)
+  @JoinColumn({ name: 'conversion_vehicle_id' })
+  conversionVehicle?: ConversionVehicle;
+
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   quantity: number;
 
@@ -49,6 +73,9 @@ export class Sale {
 
   @Column({ name: 'total_amount', type: 'decimal', precision: 15, scale: 2 })
   totalAmount: number;
+
+  @Column({ name: 'payment_method', type: 'enum', enum: PaymentMethod, nullable: true })
+  paymentMethod?: PaymentMethod;
 
   @Column({ name: 'sale_date', type: 'datetime' })
   saleDate: Date;

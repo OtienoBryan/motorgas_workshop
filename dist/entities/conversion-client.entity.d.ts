@@ -5,8 +5,11 @@ export declare class ConversionClient {
     contact: string;
     account_number: string;
     address: string | null;
+    description: string | null;
     region: string | null;
     category: 'individual' | 'company';
+    organization_type: 'individual' | 'sacco' | 'company' | null;
+    organization_name: string | null;
     tax_pin: string | null;
     referral_source: string | null;
     referral_notes: string | null;

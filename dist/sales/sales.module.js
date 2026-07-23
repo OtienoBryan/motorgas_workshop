@@ -15,13 +15,15 @@ const sale_entity_1 = require("../entities/sale.entity");
 const station_entity_1 = require("../entities/station.entity");
 const key_account_entity_1 = require("../entities/key-account.entity");
 const vehicle_entity_1 = require("../entities/vehicle.entity");
+const conversion_client_entity_1 = require("../entities/conversion-client.entity");
+const conversion_vehicle_entity_1 = require("../entities/conversion-vehicle.entity");
 let SalesModule = class SalesModule {
 };
 exports.SalesModule = SalesModule;
 exports.SalesModule = SalesModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([sale_entity_1.Sale, station_entity_1.Station, key_account_entity_1.KeyAccount, vehicle_entity_1.Vehicle]),
+            typeorm_1.TypeOrmModule.forFeature([sale_entity_1.Sale, station_entity_1.Station, key_account_entity_1.KeyAccount, vehicle_entity_1.Vehicle, conversion_client_entity_1.ConversionClient, conversion_vehicle_entity_1.ConversionVehicle]),
         ],
         controllers: [sales_controller_1.SalesController],
         providers: [sales_service_1.SalesService],

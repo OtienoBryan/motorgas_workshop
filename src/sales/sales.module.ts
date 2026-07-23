@@ -6,10 +6,12 @@ import { Sale } from '../entities/sale.entity';
 import { Station } from '../entities/station.entity';
 import { KeyAccount } from '../entities/key-account.entity';
 import { Vehicle } from '../entities/vehicle.entity';
+import { ConversionClient } from '../entities/conversion-client.entity';
+import { ConversionVehicle } from '../entities/conversion-vehicle.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Sale, Station, KeyAccount, Vehicle]),
+    TypeOrmModule.forFeature([Sale, Station, KeyAccount, Vehicle, ConversionClient, ConversionVehicle]),
   ],
   controllers: [SalesController],
   providers: [SalesService],

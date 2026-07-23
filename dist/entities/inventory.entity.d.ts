@@ -1,4 +1,4 @@
-import { Store } from './store.entity';
+import { Station } from './station.entity';
 import { Part } from './part.entity';
 export declare class Inventory {
     id: number;
@@ -8,6 +8,6 @@ export declare class Inventory {
     min_stock_level?: number | null;
     location?: string | null;
     last_updated: Date;
-    store?: Store;
+    store?: Station;
     part?: Part;
 }

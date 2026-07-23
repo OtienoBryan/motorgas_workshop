@@ -36,11 +36,32 @@ let SalesController = class SalesController {
             throw error;
         }
     }
-    async findAll(stationId, keyAccountId) {
+    async findAll(stationId, keyAccountId, conversionClientId) {
         console.log('💰 [SalesController] GET /sales');
         const station = stationId ? parseInt(stationId, 10) : undefined;
         const keyAccount = keyAccountId ? parseInt(keyAccountId, 10) : undefined;
-        return this.salesService.findAll(station, keyAccount);
+        const conversionClient = conversionClientId ? parseInt(conversionClientId, 10) : undefined;
+        return this.salesService.findAll(station, keyAccount, conversionClient);
+    }
+    async getWeeklyReport(startDate, endDate, stationId) {
+        console.log('💰 [SalesController] GET /sales/report/weekly');
+        const today = new Date();
+        const format = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        const defaultStart = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        const start = startDate && /^\d{4}-\d{2}-\d{2}$/.test(startDate) ? startDate : format(defaultStart);
+        const end = endDate && /^\d{4}-\d{2}-\d{2}$/.test(endDate) ? endDate : format(today);
+        const station = stationId ? parseInt(stationId, 10) : undefined;
+        return this.salesService.getWeeklyReport(start, end, station);
+    }
+    async getFuelReport(startDate, endDate, stationId) {
+        console.log('⛽ [SalesController] GET /sales/report/fuel');
+        const today = new Date();
+        const format = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        const defaultStart = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        const start = startDate && /^\d{4}-\d{2}-\d{2}$/.test(startDate) ? startDate : format(defaultStart);
+        const end = endDate && /^\d{4}-\d{2}-\d{2}$/.test(endDate) ? endDate : format(today);
+        const station = stationId ? parseInt(stationId, 10) : undefined;
+        return this.salesService.getFuelReport(start, end, station);
     }
     async findOne(id) {
         console.log(`💰 [SalesController] GET /sales/${id}`);
@@ -59,10 +80,29 @@ __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)('stationId')),
     __param(1, (0, common_1.Query)('keyAccountId')),
+    __param(2, (0, common_1.Query)('conversionClientId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", Promise)
 ], SalesController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('report/weekly'),
+    __param(0, (0, common_1.Query)('startDate')),
+    __param(1, (0, common_1.Query)('endDate')),
+    __param(2, (0, common_1.Query)('stationId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:returntype", Promise)
+], SalesController.prototype, "getWeeklyReport", null);
+__decorate([
+    (0, common_1.Get)('report/fuel'),
+    __param(0, (0, common_1.Query)('startDate')),
+    __param(1, (0, common_1.Query)('endDate')),
+    __param(2, (0, common_1.Query)('stationId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:returntype", Promise)
+], SalesController.prototype, "getFuelReport", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),

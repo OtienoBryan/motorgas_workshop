@@ -17,8 +17,11 @@ class CreateConversionClientDto {
     email;
     contact;
     address;
+    description;
     region;
     category;
+    organization_type;
+    organization_name;
     tax_pin;
     referral_source;
     referral_notes;
@@ -58,12 +61,27 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
+], CreateConversionClientDto.prototype, "description", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
 ], CreateConversionClientDto.prototype, "region", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(['individual', 'company']),
     __metadata("design:type", String)
 ], CreateConversionClientDto.prototype, "category", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(['individual', 'sacco', 'company']),
+    __metadata("design:type", String)
+], CreateConversionClientDto.prototype, "organization_type", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateConversionClientDto.prototype, "organization_name", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),

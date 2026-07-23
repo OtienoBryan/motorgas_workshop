@@ -20,11 +20,20 @@ export class ConversionClient {
   @Column({ type: 'text', nullable: true })
   address: string | null;
 
+  @Column({ type: 'text', nullable: true })
+  description: string | null;
+
   @Column({ type: 'varchar', length: 191, nullable: true })
   region: string | null;
 
   @Column({ type: 'enum', enum: ['individual', 'company'], default: 'individual' })
   category: 'individual' | 'company';
+
+  @Column({ type: 'enum', enum: ['individual', 'sacco', 'company'], nullable: true })
+  organization_type: 'individual' | 'sacco' | 'company' | null;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  organization_name: string | null;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   tax_pin: string | null;
