@@ -94,6 +94,9 @@ export class SalesService {
     if (createDto.notes) {
       saleData.notes = createDto.notes;
     }
+    if (createDto.imagePath) {
+      saleData.imagePath = createDto.imagePath;
+    }
     if (createDto.createdBy) {
       saleData.createdBy = createDto.createdBy;
     }

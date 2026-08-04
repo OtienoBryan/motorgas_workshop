@@ -15,6 +15,25 @@ export class ConversionVehiclesService {
     private conversionClientRepository: Repository<ConversionClient>,
   ) {}
 
+  /**
+   * class-validator's @ValidateNested doesn't catch every malformed shape (e.g. an array
+   * element that is itself an array slips through untransformed), so filter defensively
+   * here rather than trust the DTO alone to keep garbage out of the `documents` JSON column.
+   */
+  private sanitizeDocuments(documents?: unknown[]): { title: string; url: string }[] | undefined {
+    if (!documents) return undefined;
+    return documents.filter(
+      (d): d is { title: string; url: string } =>
+        !!d &&
+        typeof d === 'object' &&
+        !Array.isArray(d) &&
+        typeof (d as any).title === 'string' &&
+        (d as any).title.trim().length > 0 &&
+        typeof (d as any).url === 'string' &&
+        (d as any).url.trim().length > 0,
+    );
+  }
+
   async findAll(): Promise<ConversionVehicle[]> {
     return this.conversionVehicleRepository.find({
       relations: ['conversionClient'],
@@ -74,17 +93,23 @@ export class ConversionVehiclesService {
       transmission_type: createConversionVehicleDto.transmission_type,
       driven_wheel: createConversionVehicleDto.driven_wheel,
       engine: createConversionVehicleDto.engine,
+      engine_capacity: createConversionVehicleDto.engine_capacity,
+      engine_code: createConversionVehicleDto.engine_code,
       current_odo: createConversionVehicleDto.current_odo,
       odo_unit: createConversionVehicleDto.odo_unit || 'KM',
       color: createConversionVehicleDto.color,
       unit_number: createConversionVehicleDto.unit_number,
       tank_capacity: createConversionVehicleDto.tank_capacity,
+      tank_year_of_production: createConversionVehicleDto.tank_year_of_production,
+      tank_serial_number: createConversionVehicleDto.tank_serial_number,
+      kit_serial_number: createConversionVehicleDto.kit_serial_number,
       telemetry_status: createConversionVehicleDto.telemetry_status,
       notes: createConversionVehicleDto.notes,
       photo_url: createConversionVehicleDto.photo_url || createConversionVehicleDto.photo_urls?.[0],
       photo_urls: createConversionVehicleDto.photo_urls,
       vsa_url: createConversionVehicleDto.vsa_url,
       logbook_url: createConversionVehicleDto.logbook_url,
+      documents: this.sanitizeDocuments(createConversionVehicleDto.documents),
       labels: createConversionVehicleDto.labels,
     });
 
@@ -111,6 +136,9 @@ export class ConversionVehiclesService {
     }
 
     Object.assign(vehicle, updateConversionVehicleDto);
+    if (updateConversionVehicleDto.documents !== undefined) {
+      vehicle.documents = this.sanitizeDocuments(updateConversionVehicleDto.documents);
+    }
     if (updateConversionVehicleDto.photo_urls) {
       vehicle.photo_url = updateConversionVehicleDto.photo_url || updateConversionVehicleDto.photo_urls[0] || null;
     }

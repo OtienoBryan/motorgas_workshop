@@ -10,5 +10,6 @@ export declare class CreateSaleDto {
     saleDate: string;
     referenceNumber?: string;
     notes?: string;
+    imagePath?: string;
     createdBy?: number;
 }

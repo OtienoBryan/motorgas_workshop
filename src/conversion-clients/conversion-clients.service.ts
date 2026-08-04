@@ -29,6 +29,9 @@ export class ConversionClientsService {
   async create(createConversionClientDto: CreateConversionClientDto): Promise<ConversionClient> {
     const client = this.conversionClientRepository.create({
       name: createConversionClientDto.name,
+      first_name: createConversionClientDto.first_name || null,
+      middle_name: createConversionClientDto.middle_name || null,
+      surname: createConversionClientDto.surname || null,
       email: createConversionClientDto.email || null,
       contact: createConversionClientDto.contact,
       address: createConversionClientDto.address || null,

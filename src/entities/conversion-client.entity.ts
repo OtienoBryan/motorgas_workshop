@@ -8,6 +8,15 @@ export class ConversionClient {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  first_name: string | null;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  middle_name: string | null;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  surname: string | null;
+
   @Column({ type: 'varchar', length: 255, nullable: true })
   email: string | null;
 

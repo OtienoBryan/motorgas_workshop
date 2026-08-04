@@ -49,6 +49,7 @@ let Sale = class Sale {
     saleDate;
     referenceNumber;
     notes;
+    imagePath;
     createdBy;
     createdAt;
     updatedAt;
@@ -139,6 +140,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     __metadata("design:type", String)
 ], Sale.prototype, "notes", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'image_path', type: 'varchar', length: 500, nullable: true }),
+    __metadata("design:type", String)
+], Sale.prototype, "imagePath", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'created_by', nullable: true }),
     __metadata("design:type", Number)

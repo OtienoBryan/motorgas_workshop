@@ -14,6 +14,9 @@ const typeorm_1 = require("typeorm");
 let ConversionClient = class ConversionClient {
     id;
     name;
+    first_name;
+    middle_name;
+    surname;
     email;
     contact;
     account_number;
@@ -48,6 +51,18 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 255 }),
     __metadata("design:type", String)
 ], ConversionClient.prototype, "name", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100, nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "first_name", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100, nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "middle_name", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100, nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "surname", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 255, nullable: true }),
     __metadata("design:type", Object)

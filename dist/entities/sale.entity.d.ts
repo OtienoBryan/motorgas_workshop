@@ -34,6 +34,7 @@ export declare class Sale {
     saleDate: Date;
     referenceNumber?: string;
     notes?: string;
+    imagePath?: string;
     createdBy?: number;
     createdAt: Date;
     updatedAt: Date;

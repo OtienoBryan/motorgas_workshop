@@ -86,6 +86,9 @@ export class Sale {
   @Column({ type: 'text', nullable: true })
   notes?: string;
 
+  @Column({ name: 'image_path', type: 'varchar', length: 500, nullable: true })
+  imagePath?: string;
+
   @Column({ name: 'created_by', nullable: true })
   createdBy?: number;
 

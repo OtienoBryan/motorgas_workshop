@@ -25,6 +25,17 @@ let ConversionVehiclesService = class ConversionVehiclesService {
         this.conversionVehicleRepository = conversionVehicleRepository;
         this.conversionClientRepository = conversionClientRepository;
     }
+    sanitizeDocuments(documents) {
+        if (!documents)
+            return undefined;
+        return documents.filter((d) => !!d &&
+            typeof d === 'object' &&
+            !Array.isArray(d) &&
+            typeof d.title === 'string' &&
+            d.title.trim().length > 0 &&
+            typeof d.url === 'string' &&
+            d.url.trim().length > 0);
+    }
     async findAll() {
         return this.conversionVehicleRepository.find({
             relations: ['conversionClient'],
@@ -75,17 +86,23 @@ let ConversionVehiclesService = class ConversionVehiclesService {
             transmission_type: createConversionVehicleDto.transmission_type,
             driven_wheel: createConversionVehicleDto.driven_wheel,
             engine: createConversionVehicleDto.engine,
+            engine_capacity: createConversionVehicleDto.engine_capacity,
+            engine_code: createConversionVehicleDto.engine_code,
             current_odo: createConversionVehicleDto.current_odo,
             odo_unit: createConversionVehicleDto.odo_unit || 'KM',
             color: createConversionVehicleDto.color,
             unit_number: createConversionVehicleDto.unit_number,
             tank_capacity: createConversionVehicleDto.tank_capacity,
+            tank_year_of_production: createConversionVehicleDto.tank_year_of_production,
+            tank_serial_number: createConversionVehicleDto.tank_serial_number,
+            kit_serial_number: createConversionVehicleDto.kit_serial_number,
             telemetry_status: createConversionVehicleDto.telemetry_status,
             notes: createConversionVehicleDto.notes,
             photo_url: createConversionVehicleDto.photo_url || createConversionVehicleDto.photo_urls?.[0],
             photo_urls: createConversionVehicleDto.photo_urls,
             vsa_url: createConversionVehicleDto.vsa_url,
             logbook_url: createConversionVehicleDto.logbook_url,
+            documents: this.sanitizeDocuments(createConversionVehicleDto.documents),
             labels: createConversionVehicleDto.labels,
         });
         return this.conversionVehicleRepository.save(vehicle);
@@ -105,6 +122,9 @@ let ConversionVehiclesService = class ConversionVehiclesService {
             }
         }
         Object.assign(vehicle, updateConversionVehicleDto);
+        if (updateConversionVehicleDto.documents !== undefined) {
+            vehicle.documents = this.sanitizeDocuments(updateConversionVehicleDto.documents);
+        }
         if (updateConversionVehicleDto.photo_urls) {
             vehicle.photo_url = updateConversionVehicleDto.photo_url || updateConversionVehicleDto.photo_urls[0] || null;
         }

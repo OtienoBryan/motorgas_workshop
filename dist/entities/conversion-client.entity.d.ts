@@ -1,6 +1,9 @@
 export declare class ConversionClient {
     id: number;
     name: string;
+    first_name: string | null;
+    middle_name: string | null;
+    surname: string | null;
     email: string | null;
     contact: string;
     account_number: string;

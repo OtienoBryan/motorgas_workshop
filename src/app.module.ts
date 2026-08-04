@@ -35,6 +35,9 @@ import { JobCardsModule } from './job-cards/job-cards.module';
 import { VehicleInspectionsModule } from './vehicle-inspections/vehicle-inspections.module';
 import { ChecklistTemplatesModule } from './checklist-templates/checklist-templates.module';
 import { AppointmentsModule } from './appointments/appointments.module';
+import { ShiftsModule } from './shifts/shifts.module';
+import { StaffLeavesModule } from './staff-leaves/staff-leaves.module';
+import { SalesPostingsModule } from './sales-postings/sales-postings.module';
 import { GlobalAuthGuard } from './auth/global-auth.guard';
 
 @Module({
@@ -83,6 +86,9 @@ import { GlobalAuthGuard } from './auth/global-auth.guard';
     VehicleInspectionsModule,
     ChecklistTemplatesModule,
     AppointmentsModule,
+    ShiftsModule,
+    StaffLeavesModule,
+    SalesPostingsModule,
   ],
   controllers: [AppController],
   providers: [

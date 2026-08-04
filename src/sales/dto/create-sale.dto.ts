@@ -50,6 +50,10 @@ export class CreateSaleDto {
   notes?: string;
 
   @IsOptional()
+  @IsString()
+  imagePath?: string;
+
+  @IsOptional()
   @IsNumber()
   @Type(() => Number)
   createdBy?: number;

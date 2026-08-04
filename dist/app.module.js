@@ -44,6 +44,9 @@ const job_cards_module_1 = require("./job-cards/job-cards.module");
 const vehicle_inspections_module_1 = require("./vehicle-inspections/vehicle-inspections.module");
 const checklist_templates_module_1 = require("./checklist-templates/checklist-templates.module");
 const appointments_module_1 = require("./appointments/appointments.module");
+const shifts_module_1 = require("./shifts/shifts.module");
+const staff_leaves_module_1 = require("./staff-leaves/staff-leaves.module");
+const sales_postings_module_1 = require("./sales-postings/sales-postings.module");
 const global_auth_guard_1 = require("./auth/global-auth.guard");
 let AppModule = class AppModule {
 };
@@ -95,6 +98,9 @@ exports.AppModule = AppModule = __decorate([
             vehicle_inspections_module_1.VehicleInspectionsModule,
             checklist_templates_module_1.ChecklistTemplatesModule,
             appointments_module_1.AppointmentsModule,
+            shifts_module_1.ShiftsModule,
+            staff_leaves_module_1.StaffLeavesModule,
+            sales_postings_module_1.SalesPostingsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

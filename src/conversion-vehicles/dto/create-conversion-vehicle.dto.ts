@@ -1,5 +1,15 @@
-import { IsString, IsNotEmpty, IsNumber, IsOptional, IsEnum, IsArray, IsIn } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsOptional, IsEnum, IsArray, IsIn, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+
+export class VehicleDocumentDto {
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @IsString()
+  @IsNotEmpty()
+  url: string;
+}
 
 export class CreateConversionVehicleDto {
   @IsNumber()
@@ -77,6 +87,19 @@ export class CreateConversionVehicleDto {
   tank_capacity?: string;
 
   @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  tank_year_of_production?: number;
+
+  @IsOptional()
+  @IsString()
+  tank_serial_number?: string;
+
+  @IsOptional()
+  @IsString()
+  kit_serial_number?: string;
+
+  @IsOptional()
   @IsIn(['Manual Tracking', 'OBD2 + TM', 'TM'])
   telemetry_status?: string;
 
@@ -100,6 +123,12 @@ export class CreateConversionVehicleDto {
   @IsOptional()
   @IsString()
   logbook_url?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => VehicleDocumentDto)
+  documents?: VehicleDocumentDto[];
 
   @IsOptional()
   @IsArray()

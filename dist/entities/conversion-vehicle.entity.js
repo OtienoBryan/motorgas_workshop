@@ -33,11 +33,15 @@ let ConversionVehicle = class ConversionVehicle {
     color;
     unit_number;
     tank_capacity;
+    tank_year_of_production;
+    tank_serial_number;
+    kit_serial_number;
     telemetry_status;
     notes;
     photo_url;
     vsa_url;
     logbook_url;
+    documents;
     photo_urls;
     labels;
     created_at;
@@ -126,6 +130,18 @@ __decorate([
     __metadata("design:type", String)
 ], ConversionVehicle.prototype, "tank_capacity", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: 'int', nullable: true }),
+    __metadata("design:type", Number)
+], ConversionVehicle.prototype, "tank_year_of_production", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100, nullable: true }),
+    __metadata("design:type", String)
+], ConversionVehicle.prototype, "tank_serial_number", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100, nullable: true }),
+    __metadata("design:type", String)
+], ConversionVehicle.prototype, "kit_serial_number", void 0);
+__decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
     __metadata("design:type", String)
 ], ConversionVehicle.prototype, "telemetry_status", void 0);
@@ -145,6 +161,27 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 500, nullable: true }),
     __metadata("design:type", Object)
 ], ConversionVehicle.prototype, "logbook_url", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'text',
+        nullable: true,
+        transformer: {
+            to: (value) => (value && value.length ? JSON.stringify(value) : null),
+            from: (value) => {
+                if (!value)
+                    return [];
+                try {
+                    const parsed = JSON.parse(value);
+                    return Array.isArray(parsed) ? parsed : [];
+                }
+                catch {
+                    return [];
+                }
+            },
+        },
+    }),
+    __metadata("design:type", Array)
+], ConversionVehicle.prototype, "documents", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         type: 'text',

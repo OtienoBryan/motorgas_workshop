@@ -64,6 +64,15 @@ export class ConversionVehicle {
   @Column({ type: 'varchar', length: 50, nullable: true })
   tank_capacity?: string;
 
+  @Column({ type: 'int', nullable: true })
+  tank_year_of_production?: number;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  tank_serial_number?: string;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  kit_serial_number?: string;
+
   @Column({ type: 'varchar', length: 50, nullable: true })
   telemetry_status?: string;
 
@@ -78,6 +87,24 @@ export class ConversionVehicle {
 
   @Column({ type: 'varchar', length: 500, nullable: true })
   logbook_url?: string | null;
+
+  @Column({
+    type: 'text',
+    nullable: true,
+    transformer: {
+      to: (value?: { title: string; url: string }[] | null) => (value && value.length ? JSON.stringify(value) : null),
+      from: (value?: string | null) => {
+        if (!value) return [];
+        try {
+          const parsed = JSON.parse(value);
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      },
+    },
+  })
+  documents?: { title: string; url: string }[];
 
   @Column({
     type: 'text',

@@ -24,6 +24,7 @@ class CreateSaleDto {
     saleDate;
     referenceNumber;
     notes;
+    imagePath;
     createdBy;
 }
 exports.CreateSaleDto = CreateSaleDto;
@@ -83,6 +84,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateSaleDto.prototype, "notes", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateSaleDto.prototype, "imagePath", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)(),

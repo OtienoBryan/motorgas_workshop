@@ -7,6 +7,18 @@ export class CreateConversionClientDto {
   name: string;
 
   @IsOptional()
+  @IsString()
+  first_name?: string;
+
+  @IsOptional()
+  @IsString()
+  middle_name?: string;
+
+  @IsOptional()
+  @IsString()
+  surname?: string;
+
+  @IsOptional()
   @IsEmail()
   email?: string;
 

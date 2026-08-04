@@ -1,3 +1,7 @@
+export declare class VehicleDocumentDto {
+    title: string;
+    url: string;
+}
 export declare class CreateConversionVehicleDto {
     conversion_client_id: number;
     registration_number: string;
@@ -17,11 +21,15 @@ export declare class CreateConversionVehicleDto {
     color?: string;
     unit_number?: string;
     tank_capacity?: string;
+    tank_year_of_production?: number;
+    tank_serial_number?: string;
+    kit_serial_number?: string;
     telemetry_status?: string;
     notes?: string;
     photo_url?: string;
     photo_urls?: string[];
     vsa_url?: string;
     logbook_url?: string;
+    documents?: VehicleDocumentDto[];
     labels?: string[];
 }

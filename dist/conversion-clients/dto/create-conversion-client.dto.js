@@ -14,6 +14,9 @@ const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
 class CreateConversionClientDto {
     name;
+    first_name;
+    middle_name;
+    surname;
     email;
     contact;
     address;
@@ -42,6 +45,21 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateConversionClientDto.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateConversionClientDto.prototype, "first_name", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateConversionClientDto.prototype, "middle_name", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateConversionClientDto.prototype, "surname", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEmail)(),

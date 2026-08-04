@@ -7,6 +7,7 @@ export declare class ConversionVehiclesService {
     private conversionVehicleRepository;
     private conversionClientRepository;
     constructor(conversionVehicleRepository: Repository<ConversionVehicle>, conversionClientRepository: Repository<ConversionClient>);
+    private sanitizeDocuments;
     findAll(): Promise<ConversionVehicle[]>;
     findByConversionClient(conversionClientId: number): Promise<ConversionVehicle[]>;
     findOne(id: number): Promise<ConversionVehicle>;

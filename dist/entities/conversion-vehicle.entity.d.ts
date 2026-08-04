@@ -20,11 +20,18 @@ export declare class ConversionVehicle {
     color?: string;
     unit_number?: string;
     tank_capacity?: string;
+    tank_year_of_production?: number;
+    tank_serial_number?: string;
+    kit_serial_number?: string;
     telemetry_status?: string;
     notes?: string;
     photo_url?: string | null;
     vsa_url?: string | null;
     logbook_url?: string | null;
+    documents?: {
+        title: string;
+        url: string;
+    }[];
     photo_urls?: string[];
     labels?: string[];
     created_at: Date;
