@@ -16,6 +16,8 @@ import { CategoriesModule } from './categories/categories.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { RegionsModule } from './regions/regions.module';
 import { StationsModule } from './stations/stations.module';
+import { LpgLedgerModule } from './lpg-ledger/lpg-ledger.module';
+import { StationTanksModule } from './station-tanks/station-tanks.module';
 import { FuelPricesModule } from './fuel-prices/fuel-prices.module';
 import { KeyAccountsModule } from './key-accounts/key-accounts.module';
 import { KeyAccountLedgerModule } from './key-account-ledger/key-account-ledger.module';
@@ -67,6 +69,8 @@ import { GlobalAuthGuard } from './auth/global-auth.guard';
     BookingsModule,
     RegionsModule,
     StationsModule,
+    LpgLedgerModule,
+    StationTanksModule,
     FuelPricesModule,
     KeyAccountsModule,
     KeyAccountLedgerModule,

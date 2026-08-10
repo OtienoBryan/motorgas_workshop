@@ -17,11 +17,14 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const appointment_entity_1 = require("../entities/appointment.entity");
+const appointment_notifications_service_1 = require("../notifications/appointment-notifications.service");
 const RELATIONS = ['conversionClient', 'conversionVehicle'];
 let AppointmentsService = class AppointmentsService {
     appointmentRepository;
-    constructor(appointmentRepository) {
+    notifications;
+    constructor(appointmentRepository, notifications) {
         this.appointmentRepository = appointmentRepository;
+        this.notifications = notifications;
     }
     async findAll() {
         return this.appointmentRepository.find({
@@ -51,10 +54,15 @@ let AppointmentsService = class AppointmentsService {
             status: dto.status || 'scheduled',
         });
         const saved = await this.appointmentRepository.save(appointment);
-        return this.findOne(saved.id);
+        const created = await this.findOne(saved.id);
+        if (created.status === 'scheduled') {
+            this.notifications.notifyClient(created, 'scheduled');
+        }
+        return created;
     }
     async update(id, dto) {
         const appointment = await this.findOne(id);
+        const previousStart = appointment.appointment_date ? new Date(appointment.appointment_date).getTime() : null;
         const { appointment_date, end_date, ...fields } = dto;
         Object.assign(appointment, fields);
         if (appointment_date) {
@@ -64,7 +72,12 @@ let AppointmentsService = class AppointmentsService {
             appointment.end_date = end_date ? new Date(end_date) : null;
         }
         await this.appointmentRepository.save(appointment);
-        return this.findOne(id);
+        const updated = await this.findOne(id);
+        const startChanged = new Date(updated.appointment_date).getTime() !== previousStart;
+        if (startChanged && updated.status === 'scheduled') {
+            this.notifications.notifyClient(updated, 'rescheduled');
+        }
+        return updated;
     }
     async remove(id) {
         const appointment = await this.findOne(id);
@@ -75,6 +88,7 @@ exports.AppointmentsService = AppointmentsService;
 exports.AppointmentsService = AppointmentsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(appointment_entity_1.Appointment)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        appointment_notifications_service_1.AppointmentNotificationsService])
 ], AppointmentsService);
 //# sourceMappingURL=appointments.service.js.map

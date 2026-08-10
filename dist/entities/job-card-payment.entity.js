@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.JobCardPayment = void 0;
 const typeorm_1 = require("typeorm");
 const job_card_entity_1 = require("./job-card.entity");
+const staff_entity_1 = require("./staff.entity");
 let JobCardPayment = class JobCardPayment {
     id;
     job_card_id;
@@ -21,6 +22,8 @@ let JobCardPayment = class JobCardPayment {
     reference;
     payment_date;
     notes;
+    posted_by;
+    postedBy;
     created_at;
 };
 exports.JobCardPayment = JobCardPayment;
@@ -60,6 +63,15 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     __metadata("design:type", Object)
 ], JobCardPayment.prototype, "notes", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'posted_by', type: 'int', nullable: true }),
+    __metadata("design:type", Object)
+], JobCardPayment.prototype, "posted_by", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => staff_entity_1.Staff),
+    (0, typeorm_1.JoinColumn)({ name: 'posted_by' }),
+    __metadata("design:type", staff_entity_1.Staff)
+], JobCardPayment.prototype, "postedBy", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)

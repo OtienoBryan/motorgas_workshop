@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 import { JobCard } from './job-card.entity';
+import { Staff } from './staff.entity';
 
 @Entity('job_card_payments')
 export class JobCardPayment {
@@ -30,6 +31,13 @@ export class JobCardPayment {
 
   @Column({ type: 'text', nullable: true })
   notes?: string | null;
+
+  @Column({ name: 'posted_by', type: 'int', nullable: true })
+  posted_by?: number | null;
+
+  @ManyToOne(() => Staff)
+  @JoinColumn({ name: 'posted_by' })
+  postedBy?: Staff;
 
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;

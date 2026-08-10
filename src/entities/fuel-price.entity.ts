@@ -19,6 +19,13 @@ export class FuelPrice {
   @Column({ type: 'varchar', length: 50, nullable: true })
   fuelType: string | null; // e.g., 'Regular', 'Premium', 'Diesel'
 
+  // The window this price is effective for. endDate null = still in force.
+  @Column({ name: 'startDate', type: 'date', nullable: true })
+  startDate: string | null;
+
+  @Column({ name: 'endDate', type: 'date', nullable: true })
+  endDate: string | null;
+
   @Column({ type: 'text', nullable: true })
   notes: string | null;
 

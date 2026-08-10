@@ -33,18 +33,38 @@ let FuelPricesService = class FuelPricesService {
         if (!station) {
             throw new common_1.NotFoundException(`Station with ID ${createFuelPriceDto.stationId} not found`);
         }
+        const today = new Date().toISOString().slice(0, 10);
+        const startDate = createFuelPriceDto.startDate || today;
         try {
+            const previous = await this.fuelPriceRepository.findOne({
+                where: { stationId: createFuelPriceDto.stationId },
+                order: { created_at: 'DESC' },
+            });
+            if (previous && !previous.endDate) {
+                const dayBefore = new Date(`${startDate}T00:00:00`);
+                dayBefore.setDate(dayBefore.getDate() - 1);
+                previous.endDate = dayBefore.toISOString().slice(0, 10);
+                await this.fuelPriceRepository.save(previous);
+                console.log(`✅ [FuelPricesService] Closed previous price ${previous.id} on ${previous.endDate}`);
+            }
             const fuelPrice = this.fuelPriceRepository.create({
                 stationId: createFuelPriceDto.stationId,
                 price: createFuelPriceDto.price,
                 fuelType: createFuelPriceDto.fuelType || null,
+                startDate,
+                endDate: createFuelPriceDto.endDate || null,
                 notes: createFuelPriceDto.notes || null,
             });
             const savedFuelPrice = await this.fuelPriceRepository.save(fuelPrice);
             console.log(`✅ [FuelPricesService] Fuel price created with ID: ${savedFuelPrice.id}`);
-            station.price = createFuelPriceDto.price;
-            await this.stationRepository.save(station);
-            console.log(`✅ [FuelPricesService] Updated station ${station.id} price to ${createFuelPriceDto.price}`);
+            if (startDate <= today && (!createFuelPriceDto.endDate || createFuelPriceDto.endDate >= today)) {
+                station.price = createFuelPriceDto.price;
+                await this.stationRepository.save(station);
+                console.log(`✅ [FuelPricesService] Updated station ${station.id} price to ${createFuelPriceDto.price}`);
+            }
+            else {
+                console.log(`⏳ [FuelPricesService] Price for station ${station.id} is not effective today — station price left unchanged`);
+            }
             const fuelPriceWithRelations = await this.fuelPriceRepository.findOne({
                 where: { id: savedFuelPrice.id },
                 relations: ['station']

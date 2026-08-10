@@ -1,4 +1,4 @@
-import { IsNumber, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsNotEmpty, IsOptional, IsString, IsDateString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateFuelPriceDto {
@@ -15,6 +15,14 @@ export class CreateFuelPriceDto {
   @IsOptional()
   @IsString()
   fuelType?: string;
+
+  @IsOptional()
+  @IsDateString()
+  startDate?: string;
+
+  @IsOptional()
+  @IsDateString()
+  endDate?: string;
 
   @IsOptional()
   @IsString()

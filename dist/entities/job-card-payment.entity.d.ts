@@ -1,4 +1,5 @@
 import { JobCard } from './job-card.entity';
+import { Staff } from './staff.entity';
 export declare class JobCardPayment {
     id: number;
     job_card_id: number;
@@ -8,5 +9,7 @@ export declare class JobCardPayment {
     reference?: string | null;
     payment_date: string;
     notes?: string | null;
+    posted_by?: number | null;
+    postedBy?: Staff;
     created_at: Date;
 }

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Appointment } from '../entities/appointment.entity';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { AppointmentNotificationsService } from '../notifications/appointment-notifications.service';
 
 const RELATIONS = ['conversionClient', 'conversionVehicle'];
 
@@ -12,6 +13,7 @@ export class AppointmentsService {
   constructor(
     @InjectRepository(Appointment)
     private appointmentRepository: Repository<Appointment>,
+    private notifications: AppointmentNotificationsService,
   ) {}
 
   async findAll(): Promise<Appointment[]> {
@@ -47,11 +49,18 @@ export class AppointmentsService {
     });
 
     const saved = await this.appointmentRepository.save(appointment);
-    return this.findOne(saved.id);
+    const created = await this.findOne(saved.id);
+
+    if (created.status === 'scheduled') {
+      this.notifications.notifyClient(created, 'scheduled');
+    }
+
+    return created;
   }
 
   async update(id: number, dto: UpdateAppointmentDto): Promise<Appointment> {
     const appointment = await this.findOne(id);
+    const previousStart = appointment.appointment_date ? new Date(appointment.appointment_date).getTime() : null;
     const { appointment_date, end_date, ...fields } = dto;
     Object.assign(appointment, fields);
     if (appointment_date) {
@@ -61,7 +70,14 @@ export class AppointmentsService {
       appointment.end_date = end_date ? new Date(end_date) : null;
     }
     await this.appointmentRepository.save(appointment);
-    return this.findOne(id);
+    const updated = await this.findOne(id);
+
+    const startChanged = new Date(updated.appointment_date).getTime() !== previousStart;
+    if (startChanged && updated.status === 'scheduled') {
+      this.notifications.notifyClient(updated, 'rescheduled');
+    }
+
+    return updated;
   }
 
   async remove(id: number): Promise<void> {

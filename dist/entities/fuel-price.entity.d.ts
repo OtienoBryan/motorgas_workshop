@@ -5,6 +5,8 @@ export declare class FuelPrice {
     station?: Station;
     price: number;
     fuelType: string | null;
+    startDate: string | null;
+    endDate: string | null;
     notes: string | null;
     created_at: Date;
 }

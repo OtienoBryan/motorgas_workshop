@@ -46,6 +46,8 @@ import { Appointment } from '../entities/appointment.entity';
 import { Shift } from '../entities/shift.entity';
 import { StaffLeave } from '../entities/staff-leave.entity';
 import { SalesPosting } from '../entities/sales-posting.entity';
+import { StationLpgLedger } from '../entities/station-lpg-ledger.entity';
+import { StationTank } from '../entities/station-tank.entity';
 
 export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOptions => ({
   type: 'mysql',
@@ -54,7 +56,7 @@ export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOp
   username: configService.get<string>('DB_USERNAME'),
   password: configService.get<string>('DB_PASSWORD'),
   database: configService.get<string>('DB_DATABASE'),
-      entities: [Staff, Department, ChatRoom, ChatMessage, Notice, Country, SalesRep, Region, Route, LoginHistory, Station, FuelPrice, Client, Product, Category, Aircraft, Destination, FlightSeries, SeatReservation, Passenger, Booking, BookingPassenger, ClientLedger, SalesOrder, SalesOrderItem, Supplier, PurchaseOrder, PurchaseOrderItem, Task, Crew, KeyAccount, KeyAccountLedger, Vehicle, Inventory, InventoryLedger, Sale, Conversion, ConversionClient, ConversionVehicle, Part, PartInventory, PartCategory, Vendor, VendorLedger, PartPurchaseOrder, PartPurchaseOrderItem, Store, Service, JobCard, JobCardItem, JobCardPayment, VehicleInspection, ChecklistTemplate, Appointment, Shift, StaffLeave, SalesPosting],
+      entities: [Staff, Department, ChatRoom, ChatMessage, Notice, Country, SalesRep, Region, Route, LoginHistory, Station, FuelPrice, Client, Product, Category, Aircraft, Destination, FlightSeries, SeatReservation, Passenger, Booking, BookingPassenger, ClientLedger, SalesOrder, SalesOrderItem, Supplier, PurchaseOrder, PurchaseOrderItem, Task, Crew, KeyAccount, KeyAccountLedger, Vehicle, Inventory, InventoryLedger, Sale, Conversion, ConversionClient, ConversionVehicle, Part, PartInventory, PartCategory, Vendor, VendorLedger, PartPurchaseOrder, PartPurchaseOrderItem, Store, Service, JobCard, JobCardItem, JobCardPayment, VehicleInspection, ChecklistTemplate, Appointment, Shift, StaffLeave, SalesPosting, StationLpgLedger, StationTank],
   synchronize: false, // Disabled to avoid schema conflicts
   logging: ['error'], // Only log query errors — logging every query slows requests down
   extra: {

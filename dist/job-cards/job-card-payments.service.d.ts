@@ -7,5 +7,6 @@ export declare class JobCardPaymentsService {
     private jobCardRepository;
     constructor(paymentRepository: Repository<JobCardPayment>, jobCardRepository: Repository<JobCard>);
     findAllForJobCard(jobCardId: number): Promise<JobCardPayment[]>;
-    create(jobCardId: number, dto: CreateJobCardPaymentDto): Promise<JobCardPayment>;
+    findAll(): Promise<JobCardPayment[]>;
+    create(jobCardId: number, dto: CreateJobCardPaymentDto, postedBy?: number | null): Promise<JobCardPayment>;
 }

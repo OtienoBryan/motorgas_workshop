@@ -17,11 +17,21 @@ export class JobCardPaymentsService {
   async findAllForJobCard(jobCardId: number): Promise<JobCardPayment[]> {
     return this.paymentRepository.find({
       where: { job_card_id: jobCardId },
+      relations: ['postedBy'],
       order: { payment_date: 'DESC', id: 'DESC' },
     });
   }
 
-  async create(jobCardId: number, dto: CreateJobCardPaymentDto): Promise<JobCardPayment> {
+  /** Every payment across all job cards, for the payments register. */
+  async findAll(): Promise<JobCardPayment[]> {
+    return this.paymentRepository.find({
+      // items come along so the receipt can show the invoice total and balance
+      relations: ['postedBy', 'jobCard', 'jobCard.conversionClient', 'jobCard.conversionVehicle', 'jobCard.items'],
+      order: { payment_date: 'DESC', id: 'DESC' },
+    });
+  }
+
+  async create(jobCardId: number, dto: CreateJobCardPaymentDto, postedBy?: number | null): Promise<JobCardPayment> {
     const jobCard = await this.jobCardRepository.findOne({ where: { id: jobCardId } });
     if (!jobCard) {
       throw new NotFoundException(`Job card with ID ${jobCardId} not found`);
@@ -34,6 +44,7 @@ export class JobCardPaymentsService {
       reference: dto.reference ?? null,
       payment_date: dto.payment_date,
       notes: dto.notes ?? null,
+      posted_by: postedBy ?? null,
     });
     const saved = await this.paymentRepository.save(payment);
 

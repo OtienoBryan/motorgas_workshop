@@ -23,7 +23,7 @@ exports.JobCardsModule = JobCardsModule;
 exports.JobCardsModule = JobCardsModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([job_card_entity_1.JobCard, job_card_item_entity_1.JobCardItem, job_card_payment_entity_1.JobCardPayment]), inventory_module_1.InventoryModule],
-        controllers: [job_cards_controller_1.JobCardsController, job_card_payments_controller_1.JobCardPaymentsController],
+        controllers: [job_cards_controller_1.JobCardsController, job_card_payments_controller_1.JobCardPaymentsController, job_card_payments_controller_1.PaymentsController],
         providers: [job_cards_service_1.JobCardsService, job_card_payments_service_1.JobCardPaymentsService],
         exports: [job_cards_service_1.JobCardsService, job_card_payments_service_1.JobCardPaymentsService],
     })

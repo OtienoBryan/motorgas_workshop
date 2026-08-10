@@ -28,10 +28,17 @@ let JobCardPaymentsService = class JobCardPaymentsService {
     async findAllForJobCard(jobCardId) {
         return this.paymentRepository.find({
             where: { job_card_id: jobCardId },
+            relations: ['postedBy'],
             order: { payment_date: 'DESC', id: 'DESC' },
         });
     }
-    async create(jobCardId, dto) {
+    async findAll() {
+        return this.paymentRepository.find({
+            relations: ['postedBy', 'jobCard', 'jobCard.conversionClient', 'jobCard.conversionVehicle', 'jobCard.items'],
+            order: { payment_date: 'DESC', id: 'DESC' },
+        });
+    }
+    async create(jobCardId, dto, postedBy) {
         const jobCard = await this.jobCardRepository.findOne({ where: { id: jobCardId } });
         if (!jobCard) {
             throw new common_1.NotFoundException(`Job card with ID ${jobCardId} not found`);
@@ -43,6 +50,7 @@ let JobCardPaymentsService = class JobCardPaymentsService {
             reference: dto.reference ?? null,
             payment_date: dto.payment_date,
             notes: dto.notes ?? null,
+            posted_by: postedBy ?? null,
         });
         const saved = await this.paymentRepository.save(payment);
         jobCard.amount_paid = Number(jobCard.amount_paid) + Number(dto.amount);

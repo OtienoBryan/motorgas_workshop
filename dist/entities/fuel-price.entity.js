@@ -18,6 +18,8 @@ let FuelPrice = class FuelPrice {
     station;
     price;
     fuelType;
+    startDate;
+    endDate;
     notes;
     created_at;
 };
@@ -43,6 +45,14 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
     __metadata("design:type", Object)
 ], FuelPrice.prototype, "fuelType", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'startDate', type: 'date', nullable: true }),
+    __metadata("design:type", Object)
+], FuelPrice.prototype, "startDate", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'endDate', type: 'date', nullable: true }),
+    __metadata("design:type", Object)
+], FuelPrice.prototype, "endDate", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     __metadata("design:type", Object)

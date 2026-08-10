@@ -25,6 +25,8 @@ const categories_module_1 = require("./categories/categories.module");
 const bookings_module_1 = require("./bookings/bookings.module");
 const regions_module_1 = require("./regions/regions.module");
 const stations_module_1 = require("./stations/stations.module");
+const lpg_ledger_module_1 = require("./lpg-ledger/lpg-ledger.module");
+const station_tanks_module_1 = require("./station-tanks/station-tanks.module");
 const fuel_prices_module_1 = require("./fuel-prices/fuel-prices.module");
 const key_accounts_module_1 = require("./key-accounts/key-accounts.module");
 const key_account_ledger_module_1 = require("./key-account-ledger/key-account-ledger.module");
@@ -79,6 +81,8 @@ exports.AppModule = AppModule = __decorate([
             bookings_module_1.BookingsModule,
             regions_module_1.RegionsModule,
             stations_module_1.StationsModule,
+            lpg_ledger_module_1.LpgLedgerModule,
+            station_tanks_module_1.StationTanksModule,
             fuel_prices_module_1.FuelPricesModule,
             key_accounts_module_1.KeyAccountsModule,
             key_account_ledger_module_1.KeyAccountLedgerModule,

@@ -16,6 +16,8 @@ class CreateFuelPriceDto {
     stationId;
     price;
     fuelType;
+    startDate;
+    endDate;
     notes;
 }
 exports.CreateFuelPriceDto = CreateFuelPriceDto;
@@ -36,6 +38,16 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateFuelPriceDto.prototype, "fuelType", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDateString)(),
+    __metadata("design:type", String)
+], CreateFuelPriceDto.prototype, "startDate", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDateString)(),
+    __metadata("design:type", String)
+], CreateFuelPriceDto.prototype, "endDate", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
