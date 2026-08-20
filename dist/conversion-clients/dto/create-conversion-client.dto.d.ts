@@ -5,6 +5,7 @@ export declare class CreateConversionClientDto {
     surname?: string;
     email?: string;
     contact: string;
+    account_number?: string;
     address?: string;
     description?: string;
     region?: string;

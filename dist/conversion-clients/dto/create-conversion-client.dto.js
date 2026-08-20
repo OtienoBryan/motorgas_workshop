@@ -19,6 +19,7 @@ class CreateConversionClientDto {
     surname;
     email;
     contact;
+    account_number;
     address;
     description;
     region;
@@ -70,6 +71,11 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateConversionClientDto.prototype, "contact", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateConversionClientDto.prototype, "account_number", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),

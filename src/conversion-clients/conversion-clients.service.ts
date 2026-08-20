@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConversionClient } from '../entities/conversion-client.entity';
@@ -27,6 +27,11 @@ export class ConversionClientsService {
   }
 
   async create(createConversionClientDto: CreateConversionClientDto): Promise<ConversionClient> {
+    const accountNumber = createConversionClientDto.account_number?.trim();
+    if (accountNumber) {
+      await this.assertAccountNumberAvailable(accountNumber);
+    }
+
     const client = this.conversionClientRepository.create({
       name: createConversionClientDto.name,
       first_name: createConversionClientDto.first_name || null,
@@ -53,7 +58,7 @@ export class ConversionClientsService {
       payment_terms_override: createConversionClientDto.payment_terms_override !== undefined ? createConversionClientDto.payment_terms_override : 0,
       payment_terms: createConversionClientDto.payment_terms || null,
       is_active: createConversionClientDto.is_active !== undefined ? createConversionClientDto.is_active : 1,
-      account_number: await this.generateUniqueAccountNumber(),
+      account_number: accountNumber || await this.generateUniqueAccountNumber(),
     });
 
     return this.conversionClientRepository.save(client);
@@ -74,8 +79,24 @@ export class ConversionClientsService {
     return accountNumber;
   }
 
+  private async assertAccountNumberAvailable(accountNumber: string, excludeId?: number): Promise<void> {
+    const existing = await this.conversionClientRepository.findOne({ where: { account_number: accountNumber } });
+    if (existing && existing.id !== excludeId) {
+      throw new ConflictException(`Account number ${accountNumber} is already in use`);
+    }
+  }
+
   async update(id: number, updateConversionClientDto: UpdateConversionClientDto): Promise<ConversionClient> {
     const client = await this.findOne(id);
+
+    const accountNumber = updateConversionClientDto.account_number?.trim();
+    if (accountNumber && accountNumber !== client.account_number) {
+      await this.assertAccountNumberAvailable(accountNumber, id);
+      updateConversionClientDto.account_number = accountNumber;
+    } else {
+      delete updateConversionClientDto.account_number;
+    }
+
     Object.assign(client, updateConversionClientDto);
     return this.conversionClientRepository.save(client);
   }

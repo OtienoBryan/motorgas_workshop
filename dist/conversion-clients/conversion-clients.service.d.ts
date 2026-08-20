@@ -9,6 +9,7 @@ export declare class ConversionClientsService {
     findOne(id: number): Promise<ConversionClient>;
     create(createConversionClientDto: CreateConversionClientDto): Promise<ConversionClient>;
     private generateUniqueAccountNumber;
+    private assertAccountNumberAvailable;
     update(id: number, updateConversionClientDto: UpdateConversionClientDto): Promise<ConversionClient>;
     remove(id: number): Promise<void>;
 }

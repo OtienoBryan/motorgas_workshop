@@ -28,6 +28,10 @@ export class CreateConversionClientDto {
 
   @IsOptional()
   @IsString()
+  account_number?: string;
+
+  @IsOptional()
+  @IsString()
   address?: string;
 
   @IsOptional()
