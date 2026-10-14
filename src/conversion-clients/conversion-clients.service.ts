@@ -12,8 +12,20 @@ export class ConversionClientsService {
     private conversionClientRepository: Repository<ConversionClient>,
   ) {}
 
-  async findAll(): Promise<ConversionClient[]> {
-    return this.conversionClientRepository.find({ order: { name: 'ASC' } });
+  async findAll(): Promise<(ConversionClient & { vehicle_count: number })[]> {
+    const { entities, raw } = await this.conversionClientRepository
+      .createQueryBuilder('client')
+      .addSelect(
+        (qb) => qb
+          .select('COUNT(*)')
+          .from('conversion_vehicles', 'v')
+          .where('v.conversion_client_id = client.id'),
+        'vehicle_count',
+      )
+      .orderBy('client.name', 'ASC')
+      .getRawAndEntities();
+
+    return entities.map((client, i) => Object.assign(client, { vehicle_count: Number(raw[i].vehicle_count) || 0 }));
   }
 
   async findOne(id: number): Promise<ConversionClient> {

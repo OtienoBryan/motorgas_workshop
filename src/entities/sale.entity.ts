@@ -77,7 +77,21 @@ export class Sale {
   @Column({ name: 'payment_method', type: 'enum', enum: PaymentMethod, nullable: true })
   paymentMethod?: PaymentMethod;
 
-  @Column({ name: 'sale_date', type: 'datetime' })
+  // Returned as a zone-less wall-clock string ("YYYY-MM-DDTHH:mm:ss") exactly as stored,
+  // so neither the server's nor the browser's timezone shifts it.
+  @Column({
+    name: 'sale_date',
+    type: 'datetime',
+    transformer: {
+      to: (value?: Date | string) => (typeof value === 'string' ? new Date(value) : value),
+      from: (value?: Date | string | null) => {
+        if (!value) return value as any;
+        if (typeof value === 'string') return value.replace(' ', 'T').slice(0, 19);
+        const p = (n: number) => String(n).padStart(2, '0');
+        return `${value.getFullYear()}-${p(value.getMonth() + 1)}-${p(value.getDate())}T${p(value.getHours())}:${p(value.getMinutes())}:${p(value.getSeconds())}`;
+      },
+    },
+  })
   saleDate: Date;
 
   @Column({ name: 'reference_number', type: 'varchar', length: 255, nullable: true })
