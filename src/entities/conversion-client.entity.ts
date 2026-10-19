@@ -17,6 +17,9 @@ export class ConversionClient {
   @Column({ type: 'varchar', length: 100, nullable: true })
   surname: string | null;
 
+  @Column({ type: 'enum', enum: ['single', 'married', 'divorced', 'widowed', 'other'], nullable: true })
+  relationship_status: 'single' | 'married' | 'divorced' | 'widowed' | 'other' | null;
+
   @Column({ type: 'varchar', length: 255, nullable: true })
   email: string | null;
 

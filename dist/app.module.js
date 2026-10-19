@@ -50,6 +50,7 @@ const appointments_module_1 = require("./appointments/appointments.module");
 const shifts_module_1 = require("./shifts/shifts.module");
 const staff_leaves_module_1 = require("./staff-leaves/staff-leaves.module");
 const sales_postings_module_1 = require("./sales-postings/sales-postings.module");
+const external_vehicles_module_1 = require("./external-vehicles/external-vehicles.module");
 const global_auth_guard_1 = require("./auth/global-auth.guard");
 let AppModule = class AppModule {
 };
@@ -107,6 +108,7 @@ exports.AppModule = AppModule = __decorate([
             shifts_module_1.ShiftsModule,
             staff_leaves_module_1.StaffLeavesModule,
             sales_postings_module_1.SalesPostingsModule,
+            external_vehicles_module_1.ExternalVehiclesModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

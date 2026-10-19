@@ -3,6 +3,7 @@ export declare class CreateConversionClientDto {
     first_name?: string;
     middle_name?: string;
     surname?: string;
+    relationship_status?: 'single' | 'married' | 'divorced' | 'widowed' | 'other';
     email?: string;
     contact: string;
     account_number?: string;

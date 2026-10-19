@@ -5,7 +5,9 @@ import { UpdateConversionClientDto } from './dto/update-conversion-client.dto';
 export declare class ConversionClientsService {
     private conversionClientRepository;
     constructor(conversionClientRepository: Repository<ConversionClient>);
-    findAll(): Promise<ConversionClient[]>;
+    findAll(): Promise<(ConversionClient & {
+        vehicle_count: number;
+    })[]>;
     findOne(id: number): Promise<ConversionClient>;
     create(createConversionClientDto: CreateConversionClientDto): Promise<ConversionClient>;
     private generateUniqueAccountNumber;

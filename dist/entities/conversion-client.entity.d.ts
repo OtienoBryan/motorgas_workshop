@@ -4,6 +4,7 @@ export declare class ConversionClient {
     first_name: string | null;
     middle_name: string | null;
     surname: string | null;
+    relationship_status: 'single' | 'married' | 'divorced' | 'widowed' | 'other' | null;
     email: string | null;
     contact: string;
     account_number: string;

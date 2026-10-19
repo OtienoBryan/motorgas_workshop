@@ -19,6 +19,10 @@ export class CreateConversionClientDto {
   surname?: string;
 
   @IsOptional()
+  @IsEnum(['single', 'married', 'divorced', 'widowed', 'other'])
+  relationship_status?: 'single' | 'married' | 'divorced' | 'widowed' | 'other';
+
+  @IsOptional()
   @IsEmail()
   email?: string;
 

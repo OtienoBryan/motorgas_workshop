@@ -23,7 +23,15 @@ let ConversionClientsService = class ConversionClientsService {
         this.conversionClientRepository = conversionClientRepository;
     }
     async findAll() {
-        return this.conversionClientRepository.find({ order: { name: 'ASC' } });
+        const { entities, raw } = await this.conversionClientRepository
+            .createQueryBuilder('client')
+            .addSelect((qb) => qb
+            .select('COUNT(*)')
+            .from('conversion_vehicles', 'v')
+            .where('v.conversion_client_id = client.id'), 'vehicle_count')
+            .orderBy('client.name', 'ASC')
+            .getRawAndEntities();
+        return entities.map((client, i) => Object.assign(client, { vehicle_count: Number(raw[i].vehicle_count) || 0 }));
     }
     async findOne(id) {
         const client = await this.conversionClientRepository.findOne({ where: { id } });
@@ -51,6 +59,7 @@ let ConversionClientsService = class ConversionClientsService {
             organization_type: createConversionClientDto.organization_type || null,
             organization_name: createConversionClientDto.organization_name || null,
             tax_pin: createConversionClientDto.tax_pin || null,
+            relationship_status: createConversionClientDto.relationship_status || null,
             referral_source: createConversionClientDto.referral_source || null,
             referral_notes: createConversionClientDto.referral_notes || null,
             tax_exempt: createConversionClientDto.tax_exempt !== undefined ? createConversionClientDto.tax_exempt : 0,

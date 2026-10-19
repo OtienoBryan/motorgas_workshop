@@ -17,6 +17,7 @@ class CreateConversionClientDto {
     first_name;
     middle_name;
     surname;
+    relationship_status;
     email;
     contact;
     account_number;
@@ -61,6 +62,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateConversionClientDto.prototype, "surname", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(['single', 'married', 'divorced', 'widowed', 'other']),
+    __metadata("design:type", String)
+], CreateConversionClientDto.prototype, "relationship_status", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEmail)(),

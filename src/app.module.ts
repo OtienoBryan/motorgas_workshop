@@ -41,6 +41,7 @@ import { AppointmentsModule } from './appointments/appointments.module';
 import { ShiftsModule } from './shifts/shifts.module';
 import { StaffLeavesModule } from './staff-leaves/staff-leaves.module';
 import { SalesPostingsModule } from './sales-postings/sales-postings.module';
+import { ExternalVehiclesModule } from './external-vehicles/external-vehicles.module';
 import { GlobalAuthGuard } from './auth/global-auth.guard';
 
 @Module({
@@ -95,6 +96,7 @@ import { GlobalAuthGuard } from './auth/global-auth.guard';
     ShiftsModule,
     StaffLeavesModule,
     SalesPostingsModule,
+    ExternalVehiclesModule,
   ],
   controllers: [AppController],
   providers: [

@@ -129,7 +129,21 @@ __decorate([
     __metadata("design:type", String)
 ], Sale.prototype, "paymentMethod", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'sale_date', type: 'datetime' }),
+    (0, typeorm_1.Column)({
+        name: 'sale_date',
+        type: 'datetime',
+        transformer: {
+            to: (value) => (typeof value === 'string' ? new Date(value) : value),
+            from: (value) => {
+                if (!value)
+                    return value;
+                if (typeof value === 'string')
+                    return value.replace(' ', 'T').slice(0, 19);
+                const p = (n) => String(n).padStart(2, '0');
+                return `${value.getFullYear()}-${p(value.getMonth() + 1)}-${p(value.getDate())}T${p(value.getHours())}:${p(value.getMinutes())}:${p(value.getSeconds())}`;
+            },
+        },
+    }),
     __metadata("design:type", Date)
 ], Sale.prototype, "saleDate", void 0);
 __decorate([

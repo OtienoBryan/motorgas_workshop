@@ -17,6 +17,7 @@ let ConversionClient = class ConversionClient {
     first_name;
     middle_name;
     surname;
+    relationship_status;
     email;
     contact;
     account_number;
@@ -63,6 +64,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 100, nullable: true }),
     __metadata("design:type", Object)
 ], ConversionClient.prototype, "surname", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'enum', enum: ['single', 'married', 'divorced', 'widowed', 'other'], nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "relationship_status", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 255, nullable: true }),
     __metadata("design:type", Object)
