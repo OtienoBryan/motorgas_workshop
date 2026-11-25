@@ -17,5 +17,11 @@ CLOUDINARY_API_SECRET=your-api-secret
 CLOUDINARY_UPLOAD_PRESET=drinks-admin-upload
 
 # JWT Configuration (if needed)
-JWT_SECRET=your-jwt-secret-key
+JWT_SECRET=generate-with-node-crypto-randomBytes-48-hex
 JWT_EXPIRES_IN=24h
+
+# DB TLS (set true for remote/managed MySQL)
+DB_SSL=false
+DB_SSL_REJECT_UNAUTHORIZED=true
+# Roles allowed to manage staff accounts (comma-separated)
+ADMIN_ROLES=admin,administrator,super admin,superadmin,manager

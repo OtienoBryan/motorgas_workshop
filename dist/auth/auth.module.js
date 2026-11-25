@@ -14,6 +14,8 @@ const auth_controller_1 = require("./auth.controller");
 const jwt_auth_guard_1 = require("./jwt-auth.guard");
 const jwt_service_1 = require("./jwt.service");
 const staff_entity_1 = require("../entities/staff.entity");
+const token_denylist_service_1 = require("./token-denylist.service");
+const login_lockout_service_1 = require("./login-lockout.service");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -24,8 +26,8 @@ exports.AuthModule = AuthModule = __decorate([
             typeorm_1.TypeOrmModule.forFeature([staff_entity_1.Staff]),
         ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService, jwt_auth_guard_1.JwtAuthGuard, jwt_service_1.JwtService],
-        exports: [auth_service_1.AuthService, jwt_auth_guard_1.JwtAuthGuard, jwt_service_1.JwtService],
+        providers: [auth_service_1.AuthService, jwt_auth_guard_1.JwtAuthGuard, jwt_service_1.JwtService, token_denylist_service_1.TokenDenylistService, login_lockout_service_1.LoginLockoutService],
+        exports: [auth_service_1.AuthService, jwt_auth_guard_1.JwtAuthGuard, jwt_service_1.JwtService, token_denylist_service_1.TokenDenylistService, login_lockout_service_1.LoginLockoutService, typeorm_1.TypeOrmModule],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

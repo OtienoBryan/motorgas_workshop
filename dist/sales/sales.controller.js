@@ -43,6 +43,27 @@ let SalesController = class SalesController {
         const conversionClient = conversionClientId ? parseInt(conversionClientId, 10) : undefined;
         return this.salesService.findAll(station, keyAccount, conversionClient);
     }
+    parseListQuery(q) {
+        const int = (v) => (v && /^\d+$/.test(v) ? parseInt(v, 10) : undefined);
+        const day = (v) => (v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : undefined);
+        return {
+            page: int(q.page),
+            pageSize: int(q.pageSize),
+            stationId: int(q.stationId),
+            keyAccountId: int(q.keyAccountId),
+            conversionClientId: int(q.conversionClientId),
+            startDate: day(q.startDate),
+            endDate: day(q.endDate),
+            shift: q.shift === 'shift1' || q.shift === 'shift2' ? q.shift : undefined,
+            search: q.search,
+        };
+    }
+    async findPaginated(query) {
+        return this.salesService.findPaginated(this.parseListQuery(query));
+    }
+    async getDailyTotals(query) {
+        return this.salesService.getDailyTotals(this.parseListQuery(query));
+    }
     async getWeeklyReport(startDate, endDate, stationId) {
         console.log('💰 [SalesController] GET /sales/report/weekly');
         const today = new Date();
@@ -85,6 +106,20 @@ __decorate([
     __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", Promise)
 ], SalesController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('report/list'),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], SalesController.prototype, "findPaginated", null);
+__decorate([
+    (0, common_1.Get)('report/daily'),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], SalesController.prototype, "getDailyTotals", null);
 __decorate([
     (0, common_1.Get)('report/weekly'),
     __param(0, (0, common_1.Query)('startDate')),

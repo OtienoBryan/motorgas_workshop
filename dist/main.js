@@ -13,11 +13,14 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.use((0, compression_1.default)());
     app.use((0, helmet_1.default)({
+        hsts: { maxAge: 31536000, includeSubDomains: true },
         contentSecurityPolicy: {
             directives: {
                 defaultSrc: ["'self'"],
-                styleSrc: ["'self'", "'unsafe-inline'"],
+                styleSrc: ["'self'"],
                 scriptSrc: ["'self'"],
+                objectSrc: ["'none'"],
+                frameAncestors: ["'none'"],
                 imgSrc: ["'self'", "data:", "https:"],
             },
         },

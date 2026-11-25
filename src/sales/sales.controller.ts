@@ -8,7 +8,7 @@ import {
   ParseIntPipe,
   UseGuards 
 } from '@nestjs/common';
-import { SalesService, WeeklySalesReport, VehicleFuelReport } from './sales.service';
+import { SalesService, WeeklySalesReport, VehicleFuelReport, SalesListResult, SalesListParams, DailySalesTotal } from './sales.service';
 import { Sale } from '../entities/sale.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateSaleDto } from './dto/create-sale.dto';
@@ -44,6 +44,32 @@ export class SalesController {
     const keyAccount = keyAccountId ? parseInt(keyAccountId, 10) : undefined;
     const conversionClient = conversionClientId ? parseInt(conversionClientId, 10) : undefined;
     return this.salesService.findAll(station, keyAccount, conversionClient);
+  }
+
+  private parseListQuery(q: Record<string, string | undefined>): SalesListParams {
+    const int = (v?: string) => (v && /^\d+$/.test(v) ? parseInt(v, 10) : undefined);
+    const day = (v?: string) => (v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : undefined);
+    return {
+      page: int(q.page),
+      pageSize: int(q.pageSize),
+      stationId: int(q.stationId),
+      keyAccountId: int(q.keyAccountId),
+      conversionClientId: int(q.conversionClientId),
+      startDate: day(q.startDate),
+      endDate: day(q.endDate),
+      shift: q.shift === 'shift1' || q.shift === 'shift2' ? q.shift : undefined,
+      search: q.search,
+    };
+  }
+
+  @Get('report/list')
+  async findPaginated(@Query() query: Record<string, string | undefined>): Promise<SalesListResult> {
+    return this.salesService.findPaginated(this.parseListQuery(query));
+  }
+
+  @Get('report/daily')
+  async getDailyTotals(@Query() query: Record<string, string | undefined>): Promise<DailySalesTotal[]> {
+    return this.salesService.getDailyTotals(this.parseListQuery(query));
   }
 
   @Get('report/weekly')

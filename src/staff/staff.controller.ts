@@ -1,3 +1,6 @@
+import { Roles } from '../auth/roles.decorator';
+import { ADMIN_ROLES } from '../auth/admin-roles';
+import { CreateStaffDto, UpdateStaffDto } from './dto/staff.dto';
 import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { StaffService, StaffStats } from './staff.service';
@@ -22,15 +25,17 @@ export class StaffController {
     return this.staffService.getDepartments();
   }
 
+  @Roles(...ADMIN_ROLES)
   @Post()
-  async create(@Body() createStaffDto: Partial<Staff>): Promise<Staff> {
+  async create(@Body() createStaffDto: CreateStaffDto): Promise<Staff> {
     return this.staffService.create(createStaffDto);
   }
 
+  @Roles(...ADMIN_ROLES)
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateStaffDto: Partial<Staff>
+    @Body() updateStaffDto: UpdateStaffDto
   ): Promise<Staff> {
     return this.staffService.update(id, updateStaffDto);
   }
@@ -56,6 +61,7 @@ export class StaffController {
   }
 
 
+  @Roles(...ADMIN_ROLES)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number): Promise<{ message: string }> {
     await this.staffService.remove(id);

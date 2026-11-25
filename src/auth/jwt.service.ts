@@ -1,14 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class JwtService {
-  private readonly secretKey = process.env.JWT_SECRET || 'moonsun-admin-secret-key-2024';
+  private readonly secretKey = JwtService.requireSecret();
   private readonly expiresIn = process.env.JWT_EXPIRES_IN || '24h';
+
+  private static requireSecret(): string {
+    const secret = process.env.JWT_SECRET;
+    if (!secret || secret.length < 32) {
+      throw new Error('JWT_SECRET must be set to a random value of at least 32 characters');
+    }
+    return secret;
+  }
 
   generateToken(payload: any): string {
     try {
-      return jwt.sign(payload, this.secretKey, { expiresIn: this.expiresIn } as jwt.SignOptions);
+      return jwt.sign(payload, this.secretKey, { expiresIn: this.expiresIn, algorithm: 'HS256', jwtid: randomUUID() } as jwt.SignOptions);
     } catch (error) {
       console.error('❌ [JwtService] Error generating token:', error);
       throw new Error('Token generation failed');
@@ -17,7 +26,7 @@ export class JwtService {
 
   verifyToken(token: string): any {
     try {
-      return jwt.verify(token, this.secretKey);
+      return jwt.verify(token, this.secretKey, { algorithms: ['HS256'] });
     } catch (error) {
       console.error('❌ [JwtService] Error verifying token:', error);
       return null;

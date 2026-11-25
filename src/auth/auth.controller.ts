@@ -1,14 +1,21 @@
 import { Controller, Post, Body, UseGuards, Get, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { TokenDenylistService } from './token-denylist.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { Throttle } from '@nestjs/throttler';
 import { Public } from './public.decorator';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly denylist: TokenDenylistService,
+  ) {}
 
   @Public()
+  // Brute-force protection: 5 login attempts per minute per IP
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post('admin/login')
   async login(@Body() loginDto: LoginDto) {
     try {
@@ -18,6 +25,16 @@ export class AuthController {
       // Re-throw the error - NestJS will handle it based on the exception type
       throw error;
     }
+  }
+
+  // Revokes the caller's current token so it cannot be reused before it expires
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  logout(@Request() req) {
+    if (req.user?.jti) {
+      this.denylist.revoke(req.user.jti, req.user.exp);
+    }
+    return { message: 'Logged out' };
   }
 
   @UseGuards(JwtAuthGuard)

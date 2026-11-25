@@ -1,3 +1,4 @@
+import { CreateStaffDto, UpdateStaffDto } from './dto/staff.dto';
 import { StaffService } from './staff.service';
 import { Staff } from '../entities/staff.entity';
 import { Department } from '../entities/department.entity';
@@ -8,8 +9,8 @@ export declare class StaffController {
     constructor(staffService: StaffService, cloudinaryService: CloudinaryService);
     findAll(role?: string): Promise<Staff[]>;
     getDepartments(): Promise<Department[]>;
-    create(createStaffDto: Partial<Staff>): Promise<Staff>;
-    update(id: number, updateStaffDto: Partial<Staff>): Promise<Staff>;
+    create(createStaffDto: CreateStaffDto): Promise<Staff>;
+    update(id: number, updateStaffDto: UpdateStaffDto): Promise<Staff>;
     uploadImage(file: Express.Multer.File): Promise<{
         url: string;
         public_id: string;

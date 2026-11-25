@@ -60,6 +60,10 @@ export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOp
   password: configService.get<string>('DB_PASSWORD'),
   database: configService.get<string>('DB_DATABASE'),
       entities: [Staff, Department, ChatRoom, ChatMessage, Notice, Country, SalesRep, Region, Route, LoginHistory, Station, FuelPrice, Client, Product, Category, Aircraft, Destination, FlightSeries, SeatReservation, Passenger, Booking, BookingPassenger, ClientLedger, SalesOrder, SalesOrderItem, Supplier, PurchaseOrder, PurchaseOrderItem, Task, Crew, KeyAccount, KeyAccountLedger, Vehicle, Inventory, InventoryLedger, Sale, Conversion, ConversionClient, ConversionVehicle, Part, PartInventory, PartCategory, Vendor, VendorLedger, PartPurchaseOrder, PartPurchaseOrderItem, Store, Service, JobCard, JobCardItem, JobCardPayment, VehicleInspection, ChecklistTemplate, Appointment, Shift, StaffLeave, SalesPosting, StationLpgLedger, StationTank, StationExpense, ExternalVehicle, ExternalVehicleOwner],
+  // Encrypt the DB connection when DB_SSL=true (managed/remote MySQL)
+  ssl: configService.get<string>('DB_SSL') === 'true'
+    ? { rejectUnauthorized: configService.get<string>('DB_SSL_REJECT_UNAUTHORIZED') !== 'false' }
+    : undefined,
   synchronize: false, // Disabled to avoid schema conflicts
   logging: ['error'], // Only log query errors — logging every query slows requests down
   extra: {

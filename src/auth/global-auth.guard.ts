@@ -9,7 +9,7 @@ export class GlobalAuthGuard implements CanActivate {
     private reflector: Reflector,
   ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     // Check if the route is marked as public
     const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
       context.getHandler(),

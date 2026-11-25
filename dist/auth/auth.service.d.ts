@@ -2,6 +2,7 @@ import { Repository } from 'typeorm';
 import { Staff } from '../entities/staff.entity';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from './jwt.service';
+import { LoginLockoutService } from './login-lockout.service';
 export interface AuthResponse {
     token: string;
     user: {
@@ -15,7 +16,8 @@ export interface AuthResponse {
 export declare class AuthService {
     private staffRepository;
     private jwtService;
-    constructor(staffRepository: Repository<Staff>, jwtService: JwtService);
+    private lockout;
+    constructor(staffRepository: Repository<Staff>, jwtService: JwtService, lockout: LoginLockoutService);
     validateStaff(email: string, password: string): Promise<Staff | null>;
     login(loginDto: LoginDto): Promise<AuthResponse>;
     getStaffById(id: number): Promise<Staff | null>;

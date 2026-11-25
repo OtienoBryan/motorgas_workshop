@@ -22,6 +22,7 @@ let ConversionClient = class ConversionClient {
     contact;
     account_number;
     address;
+    country;
     description;
     region;
     category;
@@ -84,6 +85,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     __metadata("design:type", Object)
 ], ConversionClient.prototype, "address", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100, nullable: true }),
+    __metadata("design:type", Object)
+], ConversionClient.prototype, "country", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     __metadata("design:type", Object)

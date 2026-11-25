@@ -15,7 +15,7 @@ let SecurityInterceptor = class SecurityInterceptor {
         const response = context.switchToHttp().getResponse();
         response.setHeader('X-Content-Type-Options', 'nosniff');
         response.setHeader('X-Frame-Options', 'DENY');
-        response.setHeader('X-XSS-Protection', '1; mode=block');
+        response.setHeader('X-XSS-Protection', '0');
         response.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
         response.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
         const { method, url, ip } = request;

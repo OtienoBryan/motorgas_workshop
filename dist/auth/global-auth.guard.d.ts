@@ -5,5 +5,5 @@ export declare class GlobalAuthGuard implements CanActivate {
     private jwtAuthGuard;
     private reflector;
     constructor(jwtAuthGuard: JwtAuthGuard, reflector: Reflector);
-    canActivate(context: ExecutionContext): boolean;
+    canActivate(context: ExecutionContext): boolean | Promise<boolean>;
 }

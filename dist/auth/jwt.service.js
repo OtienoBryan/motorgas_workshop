@@ -38,16 +38,25 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var JwtService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JwtService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt = __importStar(require("jsonwebtoken"));
-let JwtService = class JwtService {
-    secretKey = process.env.JWT_SECRET || 'moonsun-admin-secret-key-2024';
+const crypto_1 = require("crypto");
+let JwtService = JwtService_1 = class JwtService {
+    secretKey = JwtService_1.requireSecret();
     expiresIn = process.env.JWT_EXPIRES_IN || '24h';
+    static requireSecret() {
+        const secret = process.env.JWT_SECRET;
+        if (!secret || secret.length < 32) {
+            throw new Error('JWT_SECRET must be set to a random value of at least 32 characters');
+        }
+        return secret;
+    }
     generateToken(payload) {
         try {
-            return jwt.sign(payload, this.secretKey, { expiresIn: this.expiresIn });
+            return jwt.sign(payload, this.secretKey, { expiresIn: this.expiresIn, algorithm: 'HS256', jwtid: (0, crypto_1.randomUUID)() });
         }
         catch (error) {
             console.error('❌ [JwtService] Error generating token:', error);
@@ -56,7 +65,7 @@ let JwtService = class JwtService {
     }
     verifyToken(token) {
         try {
-            return jwt.verify(token, this.secretKey);
+            return jwt.verify(token, this.secretKey, { algorithms: ['HS256'] });
         }
         catch (error) {
             console.error('❌ [JwtService] Error verifying token:', error);
@@ -88,7 +97,7 @@ let JwtService = class JwtService {
     }
 };
 exports.JwtService = JwtService;
-exports.JwtService = JwtService = __decorate([
+exports.JwtService = JwtService = JwtService_1 = __decorate([
     (0, common_1.Injectable)()
 ], JwtService);
 //# sourceMappingURL=jwt.service.js.map

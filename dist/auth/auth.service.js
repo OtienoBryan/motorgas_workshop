@@ -52,22 +52,25 @@ const typeorm_2 = require("typeorm");
 const staff_entity_1 = require("../entities/staff.entity");
 const jwt_service_1 = require("./jwt.service");
 const bcrypt = __importStar(require("bcryptjs"));
+const login_lockout_service_1 = require("./login-lockout.service");
 let AuthService = class AuthService {
     staffRepository;
     jwtService;
-    constructor(staffRepository, jwtService) {
+    lockout;
+    constructor(staffRepository, jwtService, lockout) {
         this.staffRepository = staffRepository;
         this.jwtService = jwtService;
+        this.lockout = lockout;
     }
     async validateStaff(email, password) {
-        console.log('🔍 [AuthService] Validating staff with email:', email);
+        console.log('🔍 [AuthService] Validating staff login attempt');
         try {
             if (!email || !password) {
                 console.log('❌ [AuthService] Missing email or password');
                 return null;
             }
             if (!email.includes('@')) {
-                console.log('❌ [AuthService] Invalid email format:', email);
+                console.log('❌ [AuthService] Invalid email format');
                 return null;
             }
             let staff;
@@ -79,13 +82,12 @@ let AuthService = class AuthService {
                 return null;
             }
             if (!staff) {
-                console.log('❌ [AuthService] No staff found with email:', email);
+                console.log('❌ [AuthService] No staff found for login attempt');
                 return null;
             }
             console.log('✅ [AuthService] Staff found:', {
                 id: staff.id,
                 name: staff.name,
-                email: staff.business_email,
                 is_active: staff.is_active
             });
             if (!staff.is_active) {
@@ -114,11 +116,7 @@ let AuthService = class AuthService {
         }
         catch (error) {
             console.error('❌ [AuthService] Unexpected error during validation:', error);
-            console.error('❌ [AuthService] Error details:', {
-                message: error.message,
-                stack: error.stack,
-                code: error.code
-            });
+            console.error('❌ [AuthService] Error details:', { message: error.message, code: error.code });
             return null;
         }
     }
@@ -130,6 +128,9 @@ let AuthService = class AuthService {
                 console.log('❌ [AuthService] Missing email or password in login request');
                 throw new common_1.UnauthorizedException('Email and password are required');
             }
+            if (this.lockout.isLocked(email)) {
+                throw new common_1.UnauthorizedException('Too many failed attempts. Try again in 15 minutes.');
+            }
             let staff;
             try {
                 staff = await this.validateStaff(email, password);
@@ -139,9 +140,11 @@ let AuthService = class AuthService {
                 throw new common_1.UnauthorizedException('Authentication service temporarily unavailable. Please try again later.');
             }
             if (!staff) {
+                this.lockout.recordFailure(email);
                 console.log('❌ [AuthService] Staff validation failed');
                 throw new common_1.UnauthorizedException('Invalid credentials');
             }
+            this.lockout.recordSuccess(email);
             let token;
             try {
                 const tokenPayload = {
@@ -157,7 +160,7 @@ let AuthService = class AuthService {
                 console.error('❌ [AuthService] Error generating token:', error);
                 throw new common_1.UnauthorizedException('Token generation failed. Please try again.');
             }
-            console.log('✅ [AuthService] Login successful for:', email);
+            console.log('✅ [AuthService] Login successful for staff id:', staff.id);
             return {
                 token,
                 user: {
@@ -170,8 +173,7 @@ let AuthService = class AuthService {
             };
         }
         catch (error) {
-            console.error('❌ [AuthService] Login error:', error);
-            console.error('❌ [AuthService] Error stack:', error.stack);
+            console.error('❌ [AuthService] Login error:', error?.message);
             if (error instanceof common_1.UnauthorizedException) {
                 throw error;
             }
@@ -212,6 +214,7 @@ exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(staff_entity_1.Staff)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        jwt_service_1.JwtService])
+        jwt_service_1.JwtService,
+        login_lockout_service_1.LoginLockoutService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

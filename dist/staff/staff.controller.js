@@ -13,6 +13,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StaffController = void 0;
+const roles_decorator_1 = require("../auth/roles.decorator");
+const admin_roles_1 = require("../auth/admin-roles");
+const staff_dto_1 = require("./dto/staff.dto");
 const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const staff_service_1 = require("./staff.service");
@@ -68,18 +71,20 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], StaffController.prototype, "getDepartments", null);
 __decorate([
+    (0, roles_decorator_1.Roles)(...admin_roles_1.ADMIN_ROLES),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [staff_dto_1.CreateStaffDto]),
     __metadata("design:returntype", Promise)
 ], StaffController.prototype, "create", null);
 __decorate([
+    (0, roles_decorator_1.Roles)(...admin_roles_1.ADMIN_ROLES),
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:paramtypes", [Number, staff_dto_1.UpdateStaffDto]),
     __metadata("design:returntype", Promise)
 ], StaffController.prototype, "update", null);
 __decorate([
@@ -91,6 +96,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], StaffController.prototype, "uploadImage", null);
 __decorate([
+    (0, roles_decorator_1.Roles)(...admin_roles_1.ADMIN_ROLES),
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),

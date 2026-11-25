@@ -5,6 +5,7 @@ import { Staff } from '../entities/staff.entity';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from './jwt.service';
 import * as bcrypt from 'bcryptjs';
+import { LoginLockoutService } from './login-lockout.service';
 
 export interface AuthResponse {
   token: string;
@@ -23,10 +24,11 @@ export class AuthService {
     @InjectRepository(Staff)
     private staffRepository: Repository<Staff>,
     private jwtService: JwtService,
+    private lockout: LoginLockoutService,
   ) {}
 
   async validateStaff(email: string, password: string): Promise<Staff | null> {
-    console.log('🔍 [AuthService] Validating staff with email:', email);
+    console.log('🔍 [AuthService] Validating staff login attempt');
     
     try {
       // Input validation
@@ -36,7 +38,7 @@ export class AuthService {
       }
 
       if (!email.includes('@')) {
-        console.log('❌ [AuthService] Invalid email format:', email);
+        console.log('❌ [AuthService] Invalid email format');
         return null;
       }
       
@@ -51,14 +53,13 @@ export class AuthService {
       }
       
       if (!staff) {
-        console.log('❌ [AuthService] No staff found with email:', email);
+        console.log('❌ [AuthService] No staff found for login attempt');
         return null;
       }
       
       console.log('✅ [AuthService] Staff found:', {
         id: staff.id,
         name: staff.name,
-        email: staff.business_email,
         is_active: staff.is_active
       });
       
@@ -92,11 +93,7 @@ export class AuthService {
       return staff;
     } catch (error) {
       console.error('❌ [AuthService] Unexpected error during validation:', error);
-      console.error('❌ [AuthService] Error details:', {
-        message: error.message,
-        stack: error.stack,
-        code: error.code
-      });
+      console.error('❌ [AuthService] Error details:', { message: error.message, code: error.code });
       // Return null instead of throwing to prevent 500 errors
       // The login method will handle null as invalid credentials
       return null;
@@ -115,6 +112,10 @@ export class AuthService {
         throw new UnauthorizedException('Email and password are required');
       }
       
+      if (this.lockout.isLocked(email)) {
+        throw new UnauthorizedException('Too many failed attempts. Try again in 15 minutes.');
+      }
+
       let staff: Staff | null;
       try {
         staff = await this.validateStaff(email, password);
@@ -125,9 +126,12 @@ export class AuthService {
       }
       
       if (!staff) {
+        this.lockout.recordFailure(email);
         console.log('❌ [AuthService] Staff validation failed');
         throw new UnauthorizedException('Invalid credentials');
       }
+
+      this.lockout.recordSuccess(email);
 
       // Generate JWT token
       let token: string;
@@ -146,7 +150,7 @@ export class AuthService {
         throw new UnauthorizedException('Token generation failed. Please try again.');
       }
 
-      console.log('✅ [AuthService] Login successful for:', email);
+      console.log('✅ [AuthService] Login successful for staff id:', staff.id);
       
       return {
         token,
@@ -159,8 +163,7 @@ export class AuthService {
         },
       };
     } catch (error) {
-      console.error('❌ [AuthService] Login error:', error);
-      console.error('❌ [AuthService] Error stack:', error.stack);
+      console.error('❌ [AuthService] Login error:', error?.message);
       
       // Re-throw UnauthorizedException as-is (NestJS will convert to 401)
       if (error instanceof UnauthorizedException) {

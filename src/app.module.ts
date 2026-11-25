@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { getDatabaseConfig } from './config/database.config';
@@ -43,6 +43,9 @@ import { StaffLeavesModule } from './staff-leaves/staff-leaves.module';
 import { SalesPostingsModule } from './sales-postings/sales-postings.module';
 import { ExternalVehiclesModule } from './external-vehicles/external-vehicles.module';
 import { GlobalAuthGuard } from './auth/global-auth.guard';
+import { RolesGuard } from './auth/roles.guard';
+import { AuditInterceptor } from './common/audit.interceptor';
+import { AllExceptionsFilter } from './common/all-exceptions.filter';
 
 @Module({
   imports: [
@@ -108,6 +111,18 @@ import { GlobalAuthGuard } from './auth/global-auth.guard';
     {
       provide: APP_GUARD,
       useClass: GlobalAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AuditInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
     },
   ],
 })

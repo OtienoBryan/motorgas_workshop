@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Brackets, ObjectLiteral, Repository, SelectQueryBuilder } from 'typeorm';
 import { Sale } from '../entities/sale.entity';
 import { Station } from '../entities/station.entity';
 import { Vehicle } from '../entities/vehicle.entity';
@@ -44,6 +44,40 @@ export interface VehicleFuelReport {
   startDate: string;
   endDate: string;
   vehicles: FuelReportVehicle[];
+}
+
+export interface SalesListParams {
+  page?: number;
+  pageSize?: number;
+  stationId?: number;
+  keyAccountId?: number;
+  conversionClientId?: number;
+  /** Business-day range, YYYY-MM-DD (a day runs 07:00 → 07:00). */
+  startDate?: string;
+  endDate?: string;
+  shift?: 'shift1' | 'shift2';
+  search?: string;
+}
+
+export interface DailySalesTotal {
+  /** Business day, YYYY-MM-DD */
+  date: string;
+  totalSales: number;
+  totalQuantity: number;
+  totalRevenue: number;
+}
+
+export interface SalesListResult {
+  data: Sale[];
+  total: number;
+  page: number;
+  pageSize: number;
+  summary: {
+    totalSales: number;
+    totalQuantity: number;
+    totalRevenue: number;
+    uniqueVehicles: number;
+  };
 }
 
 @Injectable()
@@ -137,6 +171,136 @@ export class SalesService {
     
     console.log(`✅ [SalesService] Found ${sales.length} sales`);
     return sales;
+  }
+
+  private joinSaleRelations<T extends ObjectLiteral>(qb: SelectQueryBuilder<T>): SelectQueryBuilder<T> {
+    return qb
+      .leftJoin('sale.station', 'station')
+      .leftJoin('sale.keyAccount', 'keyAccount')
+      .leftJoin('sale.vehicle', 'vehicle')
+      .leftJoin('sale.conversionClient', 'conversionClient')
+      .leftJoin('sale.conversionVehicle', 'conversionVehicle');
+  }
+
+  // A business day runs 07:00 → 07:00, so [startDate, endDate] maps to
+  // sale_date in [startDate 07:00, endDate+1 07:00). Plain comparisons keep the sale_date index usable.
+  private applySalesListFilters<T extends ObjectLiteral>(
+    qb: SelectQueryBuilder<T>,
+    p: SalesListParams,
+    joined: boolean,
+  ): SelectQueryBuilder<T> {
+    if (p.stationId) qb.andWhere('sale.stationId = :stationId', { stationId: p.stationId });
+    if (p.keyAccountId) qb.andWhere('sale.keyAccountId = :keyAccountId', { keyAccountId: p.keyAccountId });
+    if (p.conversionClientId) qb.andWhere('sale.conversionClientId = :conversionClientId', { conversionClientId: p.conversionClientId });
+
+    const fmt = (d: Date) => d.toISOString().slice(0, 19).replace('T', ' ');
+    const at7am = (day: string, plusDays = 0) => {
+      const [y, m, d] = day.split('-').map(Number);
+      return fmt(new Date(Date.UTC(y, m - 1, d + plusDays, 7)));
+    };
+    if (p.startDate) qb.andWhere('sale.saleDate >= :rangeStart', { rangeStart: at7am(p.startDate) });
+    if (p.endDate) qb.andWhere('sale.saleDate < :rangeEnd', { rangeEnd: at7am(p.endDate, 1) });
+
+    // Shift 1: 07:00–18:59, Shift 2: 19:00–06:59
+    if (p.shift === 'shift1') qb.andWhere('HOUR(sale.saleDate) BETWEEN 7 AND 18');
+    if (p.shift === 'shift2') qb.andWhere('(HOUR(sale.saleDate) < 7 OR HOUR(sale.saleDate) >= 19)');
+
+    const search = p.search?.trim();
+    if (search) {
+      const q = `%${search}%`;
+      qb.andWhere(
+        new Brackets(w => {
+          w.where('sale.referenceNumber LIKE :q', { q })
+            .orWhere('sale.notes LIKE :q')
+            .orWhere('sale.clientType LIKE :q');
+          if (joined) {
+            w.orWhere('station.name LIKE :q')
+              .orWhere('keyAccount.name LIKE :q')
+              .orWhere('conversionClient.name LIKE :q')
+              .orWhere('vehicle.registration_number LIKE :q')
+              .orWhere('vehicle.model LIKE :q')
+              .orWhere('conversionVehicle.registration_number LIKE :q')
+              .orWhere('conversionVehicle.model LIKE :q');
+          }
+        }),
+      );
+    }
+    return qb;
+  }
+
+  async findPaginated(p: SalesListParams): Promise<SalesListResult> {
+    const page = Math.max(1, p.page || 1);
+    const pageSize = Math.min(5000, Math.max(1, p.pageSize || 10));
+
+    // Only the columns the table renders are pulled from the joined tables
+    // (conversion_vehicles in particular carries large JSON/document columns).
+    const dataQuery = this.applySalesListFilters(
+      this.joinSaleRelations(this.saleRepository.createQueryBuilder('sale'))
+        .addSelect(['station.id', 'station.name'])
+        .addSelect(['keyAccount.id', 'keyAccount.name'])
+        .addSelect(['vehicle.id', 'vehicle.registration_number', 'vehicle.model'])
+        .addSelect(['conversionClient.id', 'conversionClient.name'])
+        .addSelect(['conversionVehicle.id', 'conversionVehicle.registration_number', 'conversionVehicle.model', 'conversionVehicle.photo_url']),
+      p,
+      true,
+    )
+      .orderBy('sale.saleDate', 'DESC')
+      .addOrderBy('sale.id', 'DESC')
+      .offset((page - 1) * pageSize)
+      .limit(pageSize);
+
+    // Totals cover every matching row (not just this page). The joins are only needed for text search.
+    const summaryBase = this.saleRepository.createQueryBuilder('sale');
+    const hasSearch = !!p.search?.trim();
+    const summaryQuery = this.applySalesListFilters(
+      hasSearch ? this.joinSaleRelations(summaryBase) : summaryBase,
+      p,
+      hasSearch,
+    ).select('COUNT(DISTINCT sale.id)', 'totalSales')
+      .addSelect('COALESCE(SUM(sale.quantity), 0)', 'totalQuantity')
+      .addSelect('COALESCE(SUM(sale.totalAmount), 0)', 'totalRevenue')
+      // vehicle_id and conversion_vehicle_id are independent id spaces, so the key carries its type
+      .addSelect(
+        "COUNT(DISTINCT CASE WHEN sale.vehicleId IS NOT NULL THEN CONCAT('v-', sale.vehicleId) " +
+          "WHEN sale.conversionVehicleId IS NOT NULL THEN CONCAT('cv-', sale.conversionVehicleId) END)",
+        'uniqueVehicles',
+      );
+
+    const [data, raw] = await Promise.all([dataQuery.getMany(), summaryQuery.getRawOne()]);
+
+    return {
+      data,
+      total: Number(raw?.totalSales) || 0,
+      page,
+      pageSize,
+      summary: {
+        totalSales: Number(raw?.totalSales) || 0,
+        totalQuantity: Number(raw?.totalQuantity) || 0,
+        totalRevenue: Number(raw?.totalRevenue) || 0,
+        uniqueVehicles: Number(raw?.uniqueVehicles) || 0,
+      },
+    };
+  }
+
+  // One row per business day (07:00 → 07:00) for the same filters the sales list accepts.
+  async getDailyTotals(p: SalesListParams): Promise<DailySalesTotal[]> {
+    const hasSearch = !!p.search?.trim();
+    const base = this.saleRepository.createQueryBuilder('sale');
+    const rows = await this.applySalesListFilters(hasSearch ? this.joinSaleRelations(base) : base, p, hasSearch)
+      .select("DATE_FORMAT(DATE_SUB(sale.saleDate, INTERVAL 7 HOUR), '%Y-%m-%d')", 'day')
+      .addSelect('COUNT(DISTINCT sale.id)', 'totalSales')
+      .addSelect('COALESCE(SUM(sale.quantity), 0)', 'totalQuantity')
+      .addSelect('COALESCE(SUM(sale.totalAmount), 0)', 'totalRevenue')
+      .groupBy('day')
+      .orderBy('day', 'ASC')
+      .getRawMany();
+
+    return rows.map(r => ({
+      date: r.day as string,
+      totalSales: Number(r.totalSales) || 0,
+      totalQuantity: Number(r.totalQuantity) || 0,
+      totalRevenue: Number(r.totalRevenue) || 0,
+    }));
   }
 
   async getWeeklyReport(

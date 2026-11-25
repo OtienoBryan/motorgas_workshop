@@ -3,6 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Staff } from '../entities/staff.entity';
 import { Department } from '../entities/department.entity';
+import * as bcrypt from 'bcryptjs';
+import { CreateStaffDto, UpdateStaffDto } from './dto/staff.dto';
+
+const BCRYPT_ROUNDS = 12;
+
+// Never expose password hashes through the API
+const withoutPassword = <T extends { password?: string }>(staff: T): T => {
+  const { password, ...rest } = staff as any;
+  return rest as T;
+};
 
 export interface StaffStats {
   total: number;
@@ -24,24 +34,33 @@ export class StaffService {
   ) {}
 
   async findAll(): Promise<Staff[]> {
-    return this.staffRepository.find({
+    const rows = await this.staffRepository.find({
       order: {
         created_at: 'DESC'
       }
     });
+    return rows.map(withoutPassword);
   }
 
   async findOne(id: number): Promise<Staff | null> {
-    return this.staffRepository.findOne({ where: { id } });
+    const row = await this.staffRepository.findOne({ where: { id } });
+    return row ? withoutPassword(row) : null;
   }
 
-  async create(createStaffDto: Partial<Staff>): Promise<Staff> {
-    const staff = this.staffRepository.create(createStaffDto);
-    return this.staffRepository.save(staff);
+  async create(createStaffDto: CreateStaffDto): Promise<Staff> {
+    const staff = this.staffRepository.create({
+      ...createStaffDto,
+      password: await bcrypt.hash(createStaffDto.password, BCRYPT_ROUNDS),
+    });
+    return withoutPassword(await this.staffRepository.save(staff));
   }
 
-  async update(id: number, updateStaffDto: Partial<Staff>): Promise<Staff> {
-    await this.staffRepository.update(id, updateStaffDto);
+  async update(id: number, updateStaffDto: UpdateStaffDto): Promise<Staff> {
+    const changes: Partial<Staff> = { ...updateStaffDto } as Partial<Staff>;
+    if (updateStaffDto.password) {
+      changes.password = await bcrypt.hash(updateStaffDto.password, BCRYPT_ROUNDS);
+    }
+    await this.staffRepository.update(id, changes);
     const updatedStaff = await this.findOne(id);
     if (!updatedStaff) {
       throw new Error('Staff member not found');

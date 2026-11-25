@@ -40,6 +40,10 @@ export class CreateConversionClientDto {
 
   @IsOptional()
   @IsString()
+  country?: string;
+
+  @IsOptional()
+  @IsString()
   description?: string;
 
   @IsOptional()

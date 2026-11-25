@@ -59,6 +59,7 @@ export class ConversionClientsService {
       organization_name: createConversionClientDto.organization_name || null,
       tax_pin: createConversionClientDto.tax_pin || null,
       relationship_status: createConversionClientDto.relationship_status || null,
+      country: createConversionClientDto.country || null,
       referral_source: createConversionClientDto.referral_source || null,
       referral_notes: createConversionClientDto.referral_notes || null,
       tax_exempt: createConversionClientDto.tax_exempt !== undefined ? createConversionClientDto.tax_exempt : 0,

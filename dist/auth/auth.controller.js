@@ -15,13 +15,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
+const token_denylist_service_1 = require("./token-denylist.service");
 const login_dto_1 = require("./dto/login.dto");
 const jwt_auth_guard_1 = require("./jwt-auth.guard");
+const throttler_1 = require("@nestjs/throttler");
 const public_decorator_1 = require("./public.decorator");
 let AuthController = class AuthController {
     authService;
-    constructor(authService) {
+    denylist;
+    constructor(authService, denylist) {
         this.authService = authService;
+        this.denylist = denylist;
     }
     async login(loginDto) {
         try {
@@ -31,6 +35,12 @@ let AuthController = class AuthController {
             console.error('❌ [AuthController] Login error:', error);
             throw error;
         }
+    }
+    logout(req) {
+        if (req.user?.jti) {
+            this.denylist.revoke(req.user.jti, req.user.exp);
+        }
+        return { message: 'Logged out' };
     }
     async getProfile(req) {
         const staff = await this.authService.getStaffById(req.user.sub);
@@ -49,12 +59,21 @@ let AuthController = class AuthController {
 exports.AuthController = AuthController;
 __decorate([
     (0, public_decorator_1.Public)(),
+    (0, throttler_1.Throttle)({ default: { limit: 5, ttl: 60000 } }),
     (0, common_1.Post)('admin/login'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [login_dto_1.LoginDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Post)('logout'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "logout", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)('profile'),
@@ -65,6 +84,7 @@ __decorate([
 ], AuthController.prototype, "getProfile", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService,
+        token_denylist_service_1.TokenDenylistService])
 ], AuthController);
 //# sourceMappingURL=auth.controller.js.map

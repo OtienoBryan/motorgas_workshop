@@ -32,6 +32,9 @@ export class ConversionClient {
   @Column({ type: 'text', nullable: true })
   address: string | null;
 
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  country: string | null;
+
   @Column({ type: 'text', nullable: true })
   description: string | null;
 

@@ -52,6 +52,9 @@ const staff_leaves_module_1 = require("./staff-leaves/staff-leaves.module");
 const sales_postings_module_1 = require("./sales-postings/sales-postings.module");
 const external_vehicles_module_1 = require("./external-vehicles/external-vehicles.module");
 const global_auth_guard_1 = require("./auth/global-auth.guard");
+const roles_guard_1 = require("./auth/roles.guard");
+const audit_interceptor_1 = require("./common/audit.interceptor");
+const all_exceptions_filter_1 = require("./common/all-exceptions.filter");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -120,6 +123,18 @@ exports.AppModule = AppModule = __decorate([
             {
                 provide: core_1.APP_GUARD,
                 useClass: global_auth_guard_1.GlobalAuthGuard,
+            },
+            {
+                provide: core_1.APP_GUARD,
+                useClass: roles_guard_1.RolesGuard,
+            },
+            {
+                provide: core_1.APP_INTERCEPTOR,
+                useClass: audit_interceptor_1.AuditInterceptor,
+            },
+            {
+                provide: core_1.APP_FILTER,
+                useClass: all_exceptions_filter_1.AllExceptionsFilter,
             },
         ],
     })

@@ -8,6 +8,7 @@ export declare class CreateConversionClientDto {
     contact: string;
     account_number?: string;
     address?: string;
+    country?: string;
     description?: string;
     region?: string;
     category?: 'individual' | 'company';

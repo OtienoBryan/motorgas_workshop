@@ -1,6 +1,7 @@
 import { Repository } from 'typeorm';
 import { Staff } from '../entities/staff.entity';
 import { Department } from '../entities/department.entity';
+import { CreateStaffDto, UpdateStaffDto } from './dto/staff.dto';
 export interface StaffStats {
     total: number;
     active: number;
@@ -16,8 +17,8 @@ export declare class StaffService {
     constructor(staffRepository: Repository<Staff>, departmentRepository: Repository<Department>);
     findAll(): Promise<Staff[]>;
     findOne(id: number): Promise<Staff | null>;
-    create(createStaffDto: Partial<Staff>): Promise<Staff>;
-    update(id: number, updateStaffDto: Partial<Staff>): Promise<Staff>;
+    create(createStaffDto: CreateStaffDto): Promise<Staff>;
+    update(id: number, updateStaffDto: UpdateStaffDto): Promise<Staff>;
     remove(id: number): Promise<void>;
     getStaffStats(): Promise<StaffStats>;
     findByDepartment(department: string): Promise<Staff[]>;

@@ -5,6 +5,8 @@ import { AuthController } from './auth.controller';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { JwtService } from './jwt.service';
 import { Staff } from '../entities/staff.entity';
+import { TokenDenylistService } from './token-denylist.service';
+import { LoginLockoutService } from './login-lockout.service';
 
 @Global()
 @Module({
@@ -12,7 +14,7 @@ import { Staff } from '../entities/staff.entity';
     TypeOrmModule.forFeature([Staff]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtAuthGuard, JwtService],
-  exports: [AuthService, JwtAuthGuard, JwtService],
+  providers: [AuthService, JwtAuthGuard, JwtService, TokenDenylistService, LoginLockoutService],
+  exports: [AuthService, JwtAuthGuard, JwtService, TokenDenylistService, LoginLockoutService, TypeOrmModule],
 })
 export class AuthModule {}
